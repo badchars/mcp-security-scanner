@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/badchars/mcp-security-scanner#readme
+    about: Check the README for setup and usage instructions
+  - name: npm Package
+    url: https://www.npmjs.com/package/mcp-security-scanner
+    about: View on npm registry

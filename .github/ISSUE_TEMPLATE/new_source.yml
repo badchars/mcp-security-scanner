@@ -1,0 +1,64 @@
+name: New Security Check
+description: Suggest a new SAST analyzer, runtime check, config check, or dependency check
+title: "[Check] "
+labels: ["enhancement", "new-check"]
+
+body:
+  - type: input
+    id: check-name
+    attributes:
+      label: Check name
+      description: Name of the proposed security check.
+      placeholder: "e.g., sast_detect_prototype_pollution, rt_check_sandbox_escape"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What type of security check is this?
+      options:
+        - Runtime
+        - Static
+        - Config
+        - Deps
+    validations:
+      required: true
+
+  - type: input
+    id: owasp-mapping
+    attributes:
+      label: OWASP MCP mapping
+      description: Which OWASP MCP Top 10 risk does this check address?
+      placeholder: "e.g., MCP-01 Tool Poisoning, MCP-04 Tool Access Control"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What does this check detect or analyze?
+    validations:
+      required: true
+
+  - type: textarea
+    id: detection-logic
+    attributes:
+      label: Detection logic
+      description: How should this check work? Describe the detection approach, patterns, or heuristics.
+      placeholder: |
+        - Parse AST for pattern X
+        - Check if config has setting Y
+        - Compare against known-bad list Z
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-valuable
+    attributes:
+      label: Why is this valuable?
+      description: What attack or misconfiguration does this prevent? Why should it be included?
+    validations:
+      required: true
