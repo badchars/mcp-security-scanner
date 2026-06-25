@@ -80,6 +80,12 @@ async function inspectWithClient(client: Client): Promise<Omit<ServerManifest, "
   return { tools, resources, prompts };
 }
 
+export interface ClientConnection {
+  client: Client;
+  manifest: ServerManifest;
+  close: () => Promise<void>;
+}
+
 export async function connectAndInspect(
   command: string,
   args: string[] = [],
@@ -90,6 +96,12 @@ export async function connectAndInspect(
 }
 
 export async function connectToServer(opts: ConnectOptions): Promise<ServerManifest> {
+  const conn = await connectWithClient(opts);
+  await conn.close();
+  return conn.manifest;
+}
+
+export async function connectWithClient(opts: ConnectOptions): Promise<ClientConnection> {
   if (!opts.command && !opts.url) {
     throw new Error("Either 'command' (stdio) or 'url' (HTTP/SSE) must be provided.");
   }
@@ -97,18 +109,18 @@ export async function connectToServer(opts: ConnectOptions): Promise<ServerManif
   const timeoutMs = opts.timeout_ms ?? 30_000;
 
   if (opts.url) {
-    return connectViaHttp(opts.url, opts.headers, timeoutMs);
+    return openViaHttp(opts.url, opts.headers, timeoutMs);
   }
 
-  return connectViaStdio(opts.command!, opts.args ?? [], opts.env, timeoutMs);
+  return openViaStdio(opts.command!, opts.args ?? [], opts.env, timeoutMs);
 }
 
-async function connectViaStdio(
+async function openViaStdio(
   command: string,
   args: string[],
   env?: Record<string, string>,
   timeoutMs = 30_000,
-): Promise<ServerManifest> {
+): Promise<ClientConnection> {
   const transport = new StdioClientTransport({
     command,
     args,
@@ -118,21 +130,23 @@ async function connectViaStdio(
   const client = new Client({ name: "mcp-security-scanner", version: "1.0.0" });
   const timer = setTimeout(() => { try { client.close(); } catch {} }, timeoutMs);
 
-  try {
-    await client.connect(transport);
-    const result = await inspectWithClient(client);
-    return { ...result, transport: "stdio" };
-  } finally {
-    clearTimeout(timer);
-    try { await client.close(); } catch {}
-  }
+  await client.connect(transport);
+  clearTimeout(timer);
+  const result = await inspectWithClient(client);
+  const manifest: ServerManifest = { ...result, transport: "stdio" };
+
+  return {
+    client,
+    manifest,
+    close: async () => { try { await client.close(); } catch {} },
+  };
 }
 
-async function connectViaHttp(
+async function openViaHttp(
   url: string,
   headers?: Record<string, string>,
   timeoutMs = 30_000,
-): Promise<ServerManifest> {
+): Promise<ClientConnection> {
   const parsedUrl = new URL(url);
   const requestInit: RequestInit = {};
   if (headers && Object.keys(headers).length > 0) {
@@ -141,52 +155,54 @@ async function connectViaHttp(
 
   // Try Streamable HTTP first (modern MCP spec), fall back to legacy SSE
   try {
-    return await connectWithStreamableHttp(parsedUrl, requestInit, timeoutMs);
+    return await openStreamableHttp(parsedUrl, requestInit, timeoutMs);
   } catch (err) {
-    // If Streamable HTTP fails, try legacy SSE transport
     try {
-      return await connectWithSse(parsedUrl, requestInit, timeoutMs);
+      return await openSse(parsedUrl, requestInit, timeoutMs);
     } catch {
-      // If both fail, throw the original Streamable HTTP error
       throw err;
     }
   }
 }
 
-async function connectWithStreamableHttp(
+async function openStreamableHttp(
   url: URL,
   requestInit: RequestInit,
   timeoutMs: number,
-): Promise<ServerManifest> {
+): Promise<ClientConnection> {
   const transport = new StreamableHTTPClientTransport(url, { requestInit });
   const client = new Client({ name: "mcp-security-scanner", version: "1.0.0" });
   const timer = setTimeout(() => { try { client.close(); } catch {} }, timeoutMs);
 
-  try {
-    await client.connect(transport);
-    const result = await inspectWithClient(client);
-    return { ...result, transport: "streamable-http" };
-  } finally {
-    clearTimeout(timer);
-    try { await client.close(); } catch {}
-  }
+  await client.connect(transport);
+  clearTimeout(timer);
+  const result = await inspectWithClient(client);
+  const manifest: ServerManifest = { ...result, transport: "streamable-http" };
+
+  return {
+    client,
+    manifest,
+    close: async () => { try { await client.close(); } catch {} },
+  };
 }
 
-async function connectWithSse(
+async function openSse(
   url: URL,
   requestInit: RequestInit,
   timeoutMs: number,
-): Promise<ServerManifest> {
+): Promise<ClientConnection> {
   const transport = new SSEClientTransport(url, { requestInit });
   const client = new Client({ name: "mcp-security-scanner", version: "1.0.0" });
   const timer = setTimeout(() => { try { client.close(); } catch {} }, timeoutMs);
 
-  try {
-    await client.connect(transport);
-    const result = await inspectWithClient(client);
-    return { ...result, transport: "sse" };
-  } finally {
-    clearTimeout(timer);
-    try { await client.close(); } catch {}
-  }
+  await client.connect(transport);
+  clearTimeout(timer);
+  const result = await inspectWithClient(client);
+  const manifest: ServerManifest = { ...result, transport: "sse" };
+
+  return {
+    client,
+    manifest,
+    close: async () => { try { await client.close(); } catch {} },
+  };
 }

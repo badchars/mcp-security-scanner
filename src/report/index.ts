@@ -33,9 +33,11 @@ import { checkTyposquatting, typosquatFindings } from "../deps/typosquat-checker
 import { detectInstallScripts, installScriptFindings } from "../deps/install-script-detector.js";
 
 // Runtime imports
-import { connectAndInspect } from "../runtime/client.js";
+import { connectWithClient } from "../runtime/client.js";
 import { analyzePoisoning, analyzeAnsiInjection, analyzeUnicodeSteganography } from "../runtime/tool-analyzer.js";
 import { analyzeScope, analyzeToolShadowing, analyzeCrossOrigin, analyzeResourceExposure } from "../runtime/schema-analyzer.js";
+import { analyzeCapabilities, analyzeInstructions, analyzeProtocolVersion } from "../runtime/capabilities-analyzer.js";
+import { analyzeResourceContent, analyzePromptContent, analyzeCallbackParams } from "../runtime/content-analyzer.js";
 
 const allSastAnalyzers = [
   analyzeCommandInjection, analyzeSsrf, analyzePathTraversal, analyzeCodeExecution,
@@ -257,20 +259,79 @@ const reportFullAudit: ToolDef = {
     // 4. Runtime Inspection (if command provided)
     if (args.command) {
       try {
-        const manifest = await connectAndInspect(
-          args.command as string,
-          args.args as string[] | undefined,
-          {},
-          30_000,
-        );
+        const conn = await connectWithClient({
+          command: args.command as string,
+          args: args.args as string[] | undefined,
+          env: {},
+          timeout_ms: 30_000,
+        });
 
-        allFindings.push(...analyzePoisoning(manifest.tools));
-        allFindings.push(...analyzeAnsiInjection(manifest.tools));
-        allFindings.push(...analyzeUnicodeSteganography(manifest.tools));
-        allFindings.push(...analyzeScope(manifest.tools));
-        allFindings.push(...analyzeToolShadowing(manifest.tools));
-        allFindings.push(...analyzeCrossOrigin(manifest.tools));
-        allFindings.push(...analyzeResourceExposure(manifest.resources, manifest.prompts));
+        try {
+          const manifest = conn.manifest;
+
+          // Core runtime checks
+          allFindings.push(...analyzePoisoning(manifest.tools));
+          allFindings.push(...analyzeAnsiInjection(manifest.tools));
+          allFindings.push(...analyzeUnicodeSteganography(manifest.tools));
+          allFindings.push(...analyzeScope(manifest.tools));
+          allFindings.push(...analyzeToolShadowing(manifest.tools));
+          allFindings.push(...analyzeCrossOrigin(manifest.tools));
+          allFindings.push(...analyzeResourceExposure(manifest.resources, manifest.prompts));
+          allFindings.push(...analyzeCallbackParams(manifest.tools));
+
+          // Advanced checks via live client
+          try {
+            const caps = conn.client.getServerCapabilities?.() ?? (conn.client as any)._serverCapabilities;
+            allFindings.push(...analyzeCapabilities(caps as Record<string, unknown> | undefined));
+          } catch {}
+
+          try {
+            const ver = (conn.client.getServerVersion?.() ?? manifest.serverInfo) as { name?: string; version?: string } | undefined;
+            allFindings.push(...analyzeProtocolVersion(ver));
+          } catch {}
+
+          try {
+            const instructions = (conn.client as any)._instructions
+              ?? (conn.client as any).serverInstructions
+              ?? (conn.client as any)._serverInstructions
+              ?? ((conn.client as any)._initializeResult ?? (conn.client as any).initializeResult)?.instructions;
+            if (instructions) allFindings.push(...analyzeInstructions(instructions));
+          } catch {}
+
+          // Read resource content
+          try {
+            const resourceContents: { uri: string; content: string; mimeType?: string }[] = [];
+            for (const res of manifest.resources.slice(0, 20)) {
+              try {
+                const result = await conn.client.readResource({ uri: res.uri });
+                for (const c of result.contents) {
+                  if ("text" in c && typeof c.text === "string") {
+                    resourceContents.push({ uri: c.uri, content: c.text, mimeType: c.mimeType });
+                  }
+                }
+              } catch {}
+            }
+            if (resourceContents.length > 0) allFindings.push(...analyzeResourceContent(resourceContents));
+          } catch {}
+
+          // Read prompt content
+          try {
+            const promptContents: { name: string; messages: { role: string; content: string }[]; arguments?: { name: string; description?: string; required?: boolean }[] }[] = [];
+            for (const p of manifest.prompts.slice(0, 20)) {
+              try {
+                const result = await conn.client.getPrompt({ name: p.name, arguments: {} });
+                const messages = ((result as any).messages ?? []).map((m: any) => ({
+                  role: m.role ?? "unknown",
+                  content: typeof m.content === "string" ? m.content : m.content?.text ?? JSON.stringify(m.content),
+                }));
+                promptContents.push({ name: p.name, messages, arguments: p.arguments });
+              } catch {}
+            }
+            if (promptContents.length > 0) allFindings.push(...analyzePromptContent(promptContents));
+          } catch {}
+        } finally {
+          await conn.close();
+        }
       } catch { /* runtime scan failed */ }
     }
 

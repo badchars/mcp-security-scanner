@@ -1,7 +1,7 @@
 {
   "name": "mcp-security-scanner",
-  "version": "1.0.0",
-  "description": "MCP security scanner — 43 tools for runtime inspection, static analysis, config audit, dependency analysis. OWASP MCP Top 10 compliance. 100% local, zero external API calls.",
+  "version": "1.1.0",
+  "description": "MCP security scanner — 55 tools for runtime inspection, static analysis, config audit, dependency analysis. OWASP MCP Top 10 compliance. OAuth, TLS, fuzz testing, prompt injection, tool mutation detection. 100% local, zero external API calls.",
   "type": "module",
   "bin": {
     "mcp-security-scanner": "dist/index.js"

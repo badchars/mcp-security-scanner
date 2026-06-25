@@ -51,8 +51,8 @@ USAGE:
   mcp-security-scanner --tool NAME '{}'   Run a single tool with JSON args
 
 SCAN SHORTCUTS:
-  mcp-security-scanner --scan-server "node server.js"     Runtime: 11 checks (stdio)
-  mcp-security-scanner --scan-server "http://host/mcp"    Runtime: 11 checks (HTTP/SSE)
+  mcp-security-scanner --scan-server "node server.js"     Runtime: 23 checks (stdio)
+  mcp-security-scanner --scan-server "http://host/mcp"    Runtime: 23 checks (HTTP/SSE)
   mcp-security-scanner --scan-source ./src                SAST: 12 checks
   mcp-security-scanner --scan-config ~/config.json        Config: 7 checks
   mcp-security-scanner --scan-deps .                      Deps: 7 checks
@@ -75,7 +75,7 @@ CONFIG DISCOVERY:
   --discover                              Find all MCP configs on system
 
 CATEGORIES:
-  rt_*      Runtime Inspection (11)  — Live server analysis
+  rt_*      Runtime Inspection (23)  — Live server analysis + advanced checks
   sast_*    Static Analysis (12)     — AST-based code scanning
   cfg_*     Config Audit (7)         — MCP config file audit
   dep_*     Dependency Analysis (7)  — Lockfile & supply chain
@@ -326,7 +326,7 @@ async function main(): Promise<void> {
 
     const ctx = await buildToolContext();
     const results: string[] = [];
-    for (const name of ["rt_inspect_server", "rt_check_tool_poisoning", "rt_check_ansi_injection", "rt_check_unicode_steganography", "rt_check_scope_creep", "rt_check_tool_shadowing", "rt_check_cross_origin", "rt_check_resource_exposure"]) {
+    for (const name of ["rt_inspect_server", "rt_check_tool_poisoning", "rt_check_ansi_injection", "rt_check_unicode_steganography", "rt_check_scope_creep", "rt_check_tool_shadowing", "rt_check_cross_origin", "rt_check_resource_exposure", "rt_check_oauth", "rt_check_tls", "rt_check_capabilities", "rt_check_resource_content", "rt_check_http_security", "rt_check_callbacks", "rt_check_prompt_injection", "rt_check_instructions", "rt_check_tool_mutation", "rt_check_rate_limiting", "rt_check_protocol_version"]) {
       const tool = allTools.find((t) => t.name === name)!;
       try {
         const r = await tool.execute(toolArgs, ctx);

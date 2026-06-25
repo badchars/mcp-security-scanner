@@ -9,7 +9,7 @@ const scannerListChecks: ToolDef = {
   schema: {},
   async execute() {
     const checks = [
-      { category: "Runtime Inspection (rt_)", count: 11, owasp: "MCP02,MCP03,MCP06,MCP07,MCP10", description: "Connect to live MCP servers, inspect tool definitions, detect poisoning, verify pins" },
+      { category: "Runtime Inspection (rt_)", count: 23, owasp: "MCP01,MCP02,MCP03,MCP05,MCP06,MCP07,MCP08,MCP10", description: "Live server analysis: tool poisoning, ANSI/Unicode injection, scope creep, shadowing, OAuth, TLS, capabilities, resource content scanning, prompt injection, fuzz testing, rate limiting, protocol version" },
       { category: "Static Analysis (sast_)", count: 12, owasp: "MCP01,MCP05,MCP08", description: "AST-based code scanning: command injection, SSRF, path traversal, code execution, secrets, crypto" },
       { category: "Config Audit (cfg_)", count: 7, owasp: "MCP01,MCP07,MCP09,MCP10", description: "Parse MCP configs, scan env files, detect shadow servers, check transport security" },
       { category: "Dependency Analysis (dep_)", count: 7, owasp: "MCP04", description: "Lockfile audit, typosquatting detection, install scripts, SDK version check" },
