@@ -47,7 +47,7 @@
   <a href="#diem-khac-biet">Điểm khác biệt</a> &bull;
   <a href="#bat-dau-nhanh">Bắt đầu nhanh</a> &bull;
   <a href="#ai-co-the-lam-gi">AI có thể làm gì</a> &bull;
-  <a href="#tham-chieu-cong-cu-43-cong-cu">Công cụ (43)</a> &bull;
+  <a href="#tham-chieu-cong-cu-55-cong-cu">Công cụ (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#kien-truc">Kiến trúc</a> &bull;
   <a href="CHANGELOG.md">Nhật ký thay đổi</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Giấy phép"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Công cụ">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Công cụ">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@ Quy trình bảo mật MCP truyền thống:
   Tổng cộng: hàng giờ cho mỗi máy chủ, chủ yếu bỏ sót các vấn đề tinh vi
 ```
 
-**mcp-security-scanner** cung cấp cho trợ lý AI của bạn 43 công cụ trong 6 danh mục. Trợ lý kết nối đến bất kỳ máy chủ MCP nào, kiểm tra các công cụ trực tiếp, quét mã nguồn bằng phân tích tĩnh dựa trên AST, kiểm toán cấu hình, kiểm tra phụ thuộc, và tạo báo cáo với điểm tuân thủ OWASP MCP Top 10 &mdash; tất cả trong một cuộc hội thoại duy nhất.
+**mcp-security-scanner** cung cấp cho trợ lý AI của bạn 55 công cụ trong 6 danh mục. Trợ lý kết nối đến bất kỳ máy chủ MCP nào, kiểm tra các công cụ trực tiếp, quét mã nguồn bằng phân tích tĩnh dựa trên AST, kiểm toán cấu hình, kiểm tra phụ thuộc, và tạo báo cáo với điểm tuân thủ OWASP MCP Top 10 &mdash; tất cả trong một cuộc hội thoại duy nhất.
 
 ```
 Với mcp-security-scanner:
@@ -160,7 +160,7 @@ Các công cụ hiện tại chỉ kiểm tra một khía cạnh hẹp. mcp-secu
 <tr>
 <td><b>Tuân thủ</b></td>
 <td>Không có công cụ chuẩn</td>
-<td>Ánh xạ OWASP MCP Top 10 &mdash; 43 kiểm tra trên 10 danh mục rủi ro</td>
+<td>Ánh xạ OWASP MCP Top 10 &mdash; 55 kiểm tra trên 10 danh mục rủi ro</td>
 </tr>
 <tr>
 <td><b>Báo cáo</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### Không cần biến môi trường
 
-mcp-security-scanner yêu cầu **không cần cấu hình gì**. Không cần khóa API, không cần token, không cần dịch vụ bên ngoài. Tất cả 43 công cụ chạy hoàn toàn trên máy cục bộ của bạn.
+mcp-security-scanner yêu cầu **không cần cấu hình gì**. Không cần khóa API, không cần token, không cần dịch vụ bên ngoài. Tất cả 55 công cụ chạy hoàn toàn trên máy cục bộ của bạn.
 
 ### Kết nối với trợ lý AI của bạn
 
@@ -336,10 +336,10 @@ Trợ lý: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ---
 
-## Tham chiếu công cụ (43 công cụ)
+## Tham chiếu công cụ (55 công cụ)
 
 <details open>
-<summary><b>Kiểm tra thời gian thực (11) &mdash; Không cần khóa API</b></summary>
+<summary><b>Kiểm tra thời gian thực (23) &mdash; Không cần khóa API</b></summary>
 
 | Công cụ | Mô tả |
 |---------|-------|
@@ -354,6 +354,18 @@ Trợ lý: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `rt_verify_pins` | Xác minh định nghĩa công cụ hiện tại so với pin đã lưu trước đó để phát hiện sửa đổi rug pull |
 | `rt_check_auth` | Phân tích cơ chế xác thực và phân quyền của máy chủ |
 | `rt_check_resource_exposure` | Kiểm tra việc phơi nhiễm tài nguyên nhạy cảm qua các endpoint tài nguyên MCP |
+| `rt_check_oauth` | Kiểm tra xem máy chủ HTTP/SSE có xác thực OAuth token không &mdash; gửi không có token, token không hợp lệ, và JWT giả mạo (alg:none) |
+| `rt_check_tls` | Kiểm tra chứng chỉ TLS &mdash; hết hạn, tự ký, chữ ký yếu (SHA-1), khóa ngắn (<2048 bit), HTTP thuần |
+| `rt_check_capabilities` | Kiểm tra khả năng máy chủ &mdash; tính năng thử nghiệm, thay đổi công cụ động (listChanged), ghi nhật ký, lấy mẫu |
+| `rt_check_resource_content` | Đọc nội dung tài nguyên thực tế qua readResource() và quét tìm đầu độc, ANSI, ẩn giấu Unicode, nội dung quá lớn |
+| `rt_fuzz_tools` | Kiểm thử fuzz công cụ với đầu vào biên &mdash; duyệt đường dẫn, chèn lệnh, chèn SQL, nhầm lẫn kiểu (dry-run mặc định) |
+| `rt_check_http_security` | Kiểm tra header phản hồi HTTP &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, cờ cookie |
+| `rt_check_callbacks` | Phát hiện tham số URL callback/webhook có thể kích hoạt SSRF &mdash; kiểm tra thiếu ràng buộc URL |
+| `rt_check_prompt_injection` | Lấy nội dung prompt qua getPrompt() và quét tìm mẫu chèn, cú pháp template, tham số nguy hiểm |
+| `rt_check_instructions` | Phân tích hướng dẫn máy chủ từ quá trình khởi tạo tìm đầu độc, kỹ thuật xã hội, độ dài quá mức |
+| `rt_check_tool_mutation` | So sánh ảnh chụp kép với độ trễ cấu hình được &mdash; phát hiện thêm, xóa, thay đổi mô tả công cụ (rug pull) |
+| `rt_check_rate_limiting` | Gửi loạt ping() nhanh để kiểm tra giới hạn tốc độ &mdash; đánh dấu máy chủ chấp nhận yêu cầu không giới hạn |
+| `rt_check_protocol_version` | Kiểm tra tên/phiên bản máy chủ từ quá trình khởi tạo &mdash; đánh dấu thiếu thông tin, phiên bản SDK lỗi thời |
 
 </details>
 
@@ -415,7 +427,7 @@ Trợ lý: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `report_generate` | Tạo báo cáo bảo mật định dạng JSON, Markdown, hoặc SARIF 2.1.0 từ các phát hiện quét |
 | `report_owasp_compliance` | Tạo báo cáo tuân thủ OWASP MCP Top 10 &mdash; ánh xạ tất cả phát hiện vào danh mục MCP01-MCP10 |
 | `report_compare` | So sánh hai báo cáo bảo mật để hiển thị các phát hiện mới, đã sửa, và không thay đổi theo thời gian |
-| `report_full_audit` | Chạy tất cả 43 kiểm tra và tạo báo cáo kiểm toán bảo mật toàn diện với điểm OWASP |
+| `report_full_audit` | Chạy tất cả 55 kiểm tra và tạo báo cáo kiểm toán bảo mật toàn diện với điểm OWASP |
 
 </details>
 
@@ -424,7 +436,7 @@ Trợ lý: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 | Công cụ | Mô tả |
 |---------|-------|
-| `scanner_list_checks` | Liệt kê tất cả 43 kiểm tra bảo mật với danh mục, mức độ nghiêm trọng, và ánh xạ OWASP MCP Top 10 |
+| `scanner_list_checks` | Liệt kê tất cả 55 kiểm tra bảo mật với danh mục, mức độ nghiêm trọng, và ánh xạ OWASP MCP Top 10 |
 | `scanner_owasp_mapping` | Hiển thị ánh xạ OWASP MCP Top 10 đầy đủ &mdash; kiểm tra nào của scanner bao phủ từng danh mục rủi ro |
 
 </details>
@@ -433,20 +445,20 @@ Trợ lý: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner ánh xạ tất cả 43 kiểm tra vào khung rủi ro [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
+mcp-security-scanner ánh xạ tất cả 55 kiểm tra vào khung rủi ro [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
 
 | ID | Rủi ro | Kiểm tra của Scanner |
 |----|--------|---------------------|
-| **MCP01** | Tool Poisoning | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | Quyền quá mức | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | Tool Shadowing | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | Lưu trữ thông tin xác thực không an toàn | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | Rò rỉ dữ liệu | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | Chèn mã | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | Rủi ro bên thứ ba / Chuỗi cung ứng | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | Ghi nhật ký không đầy đủ | `sast_missing_logging` |
-| **MCP09** | Rug Pull / Sửa đổi công cụ | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | Cấu hình sai máy chủ | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | Tool Poisoning | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | Quyền quá mức | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | Tool Shadowing | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | Lưu trữ thông tin xác thực không an toàn | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | Rò rỉ dữ liệu | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | Chèn mã | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | Rủi ro bên thứ ba / Chuỗi cung ứng | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | Ghi nhật ký không đầy đủ | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Rug Pull / Sửa đổi công cụ | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | Cấu hình sai máy chủ | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # Hiển thị trợ giúp
 mcp-security-scanner --help
 
-# Liệt kê tất cả 43 công cụ
+# Liệt kê tất cả 55 công cụ
 mcp-security-scanner --list
 
 # Chạy trực tiếp một công cụ
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # Lệnh tiện lợi
-mcp-security-scanner --full-audit .           # Kiểm toán bảo mật đầy đủ (tất cả 43 kiểm tra)
+mcp-security-scanner --full-audit .           # Kiểm toán bảo mật đầy đủ (tất cả 55 kiểm tra)
 mcp-security-scanner --scan-source src        # Chỉ phân tích tĩnh
 mcp-security-scanner --scan-deps .            # Chỉ kiểm toán phụ thuộc
 mcp-security-scanner --scan-config config.json  # Chỉ kiểm toán cấu hình
@@ -484,7 +496,7 @@ src/
   index.ts                    # Điểm vào CLI (--help, --list, --tool, --full-audit, máy chủ stdio)
   protocol/
     mcp-server.ts             # Thiết lập máy chủ MCP (transport stdio)
-    tools.ts                  # Đăng ký công cụ — tất cả 43 công cụ được tập hợp tại đây
+    tools.ts                  # Đăng ký công cụ — tất cả 55 công cụ được tập hợp tại đây
   types/
     index.ts                  # Kiểu dùng chung (ToolDef, ToolContext, ToolResult)
     findings.ts               # Kiểu mức độ nghiêm trọng phát hiện, danh mục, ánh xạ OWASP
@@ -498,12 +510,24 @@ src/
     crypto.ts                 # Băm SHA-256 cho ghim công cụ
     fs-helpers.ts             # Hàm trợ giúp hệ thống tệp (glob, đọc, quyền)
     levenshtein.ts            # Khoảng cách Levenshtein cho phát hiện typosquatting
-  runtime/                    # Công cụ kiểm tra thời gian thực (11)
+  runtime/                    # Công cụ kiểm tra thời gian thực (23)
     index.ts                  # Định nghĩa công cụ và trình xử lý
     client.ts                 # MCP client để kết nối đến máy chủ mục tiêu
     pinning.ts                # Ghim và xác minh định nghĩa công cụ SHA-256
     schema-analyzer.ts        # Phân tích schema công cụ (scope creep, quyền)
     tool-analyzer.ts          # Phân tích mô tả công cụ (poisoning, ANSI, Unicode)
+    oauth-checker.ts          # Kiểm tra xác thực OAuth token
+    tls-checker.ts            # Kiểm tra chứng chỉ TLS
+    capabilities-checker.ts   # Kiểm tra khả năng máy chủ
+    resource-content-checker.ts # Quét nội dung tài nguyên
+    fuzz-tools.ts             # Kiểm thử fuzz công cụ với đầu vào biên
+    http-security-checker.ts  # Kiểm tra header bảo mật HTTP
+    callback-checker.ts       # Phát hiện SSRF qua callback
+    prompt-injection-checker.ts # Quét chèn prompt
+    instructions-checker.ts   # Phân tích hướng dẫn máy chủ
+    tool-mutation-checker.ts  # Phát hiện biến đổi công cụ (rug pull)
+    rate-limit-checker.ts     # Kiểm tra giới hạn tốc độ
+    protocol-version-checker.ts # Kiểm tra tên/phiên bản máy chủ
   static/                     # Công cụ phân tích tĩnh (12)
     index.ts                  # Định nghĩa công cụ và trình xử lý
     ast-engine.ts             # Engine AST ts-morph cho phân tích TypeScript/JavaScript
@@ -631,7 +655,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>43 công cụ trong 6 danh mục</b></td>
+<td><b>55 công cụ trong 6 danh mục</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +672,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | Tình báo lỗ hổng | 23 công cụ, 5 nguồn |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT & trinh sát | 37 công cụ, 12 nguồn |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | Dark web & tình báo mối đe dọa | 66 công cụ, 16 nguồn |
-| **mcp-security-scanner** | **Quét bảo mật máy chủ MCP** | **43 công cụ, 6 danh mục** |
+| **mcp-security-scanner** | **Quét bảo mật máy chủ MCP** | **55 công cụ, 6 danh mục** |
 
 ---
 

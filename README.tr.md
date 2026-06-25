@@ -47,7 +47,7 @@
   <a href="#nasıl-farklı">Nasıl Farklı</a> &bull;
   <a href="#hızlı-başlangıç">Hızlı Başlangıç</a> &bull;
   <a href="#ai-neler-yapabilir">AI Neler Yapabilir</a> &bull;
-  <a href="#araç-referansı-43-araç">Araçlar (43)</a> &bull;
+  <a href="#araç-referansı-55-araç">Araçlar (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#mimari">Mimari</a> &bull;
   <a href="CHANGELOG.md">Changelog</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Tools">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Tools">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@ Geleneksel MCP güvenlik iş akışı:
   Toplam: sunucu başına saatler, çoğu ince sorunları kaçırıyor
 ```
 
-**mcp-security-scanner**, AI ajanınıza 6 kategoride 43 araç verir. Ajan herhangi bir MCP sunucusuna bağlanır, araçları canlı inceler, AST tabanlı statik analizle kaynak kodunu tarar, yapılandırmaları denetler, bağımlılıkları kontrol eder ve OWASP MCP Top 10 uyumluluk puanlarıyla raporlar oluşturur &mdash; hepsi tek bir konuşmada.
+**mcp-security-scanner**, AI ajanınıza 6 kategoride 55 araç verir. Ajan herhangi bir MCP sunucusuna bağlanır, araçları canlı inceler, AST tabanlı statik analizle kaynak kodunu tarar, yapılandırmaları denetler, bağımlılıkları kontrol eder ve OWASP MCP Top 10 uyumluluk puanlarıyla raporlar oluşturur &mdash; hepsi tek bir konuşmada.
 
 ```
 mcp-security-scanner ile:
@@ -160,7 +160,7 @@ Mevcut araçlar dar bir şeyi kontrol eder. mcp-security-scanner, AI ajanınıza
 <tr>
 <td><b>Uyumluluk</b></td>
 <td>Standart araç yok</td>
-<td>OWASP MCP Top 10 haritalama &mdash; 10 risk kategorisinde 43 kontrol</td>
+<td>OWASP MCP Top 10 haritalama &mdash; 10 risk kategorisinde 55 kontrol</td>
 </tr>
 <tr>
 <td><b>Raporlar</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### Ortam değişkenlerine gerek yok
 
-mcp-security-scanner **sıfır yapılandırma** gerektirir. API anahtarı yok, token yok, harici servis yok. 43 aracın tamamı tamamen yerel makinenizde çalışır.
+mcp-security-scanner **sıfır yapılandırma** gerektirir. API anahtarı yok, token yok, harici servis yok. 55 aracın tamamı tamamen yerel makinenizde çalışır.
 
 ### AI ajanınıza bağlanın
 
@@ -336,10 +336,10 @@ Ajan: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ---
 
-## Araç Referansı (43 araç)
+## Araç Referansı (55 araç)
 
 <details open>
-<summary><b>Runtime Inspection (11) &mdash; API anahtarı yok</b></summary>
+<summary><b>Runtime Inspection (23) &mdash; API anahtarı yok</b></summary>
 
 | Araç | Açıklama |
 |------|-------------|
@@ -354,6 +354,18 @@ Ajan: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `rt_verify_pins` | Halı çekme değişikliklerini tespit etmek için mevcut araç tanımlarını önceden kaydedilmiş pinlerle doğrula |
 | `rt_check_auth` | Sunucu kimlik doğrulama ve yetkilendirme mekanizmalarını analiz et |
 | `rt_check_resource_exposure` | MCP kaynak uç noktaları aracılığıyla hassas kaynak ifşasını kontrol et |
+| `rt_check_oauth` | HTTP/SSE sunucusunun OAuth tokenlarını doğrulayıp doğrulamadığını test et &mdash; token yok, geçersiz token ve sahte JWT (alg:none) gönderir |
+| `rt_check_tls` | TLS sertifikasını incele &mdash; süresi dolmuş, kendinden imzalı, zayıf imza (SHA-1), kısa anahtar (<2048 bit), düz HTTP |
+| `rt_check_capabilities` | Sunucu yeteneklerini incele &mdash; deneysel özellikler, dinamik araç değişiklikleri (listChanged), günlükleme, örnekleme |
+| `rt_check_resource_content` | readResource() aracılığıyla gerçek kaynak içeriğini oku ve zehirleme, ANSI, Unicode stego, aşırı boyutlu içerik için tara |
+| `rt_fuzz_tools` | Uç durum girdileriyle araçları fuzz-test et &mdash; yol geçişi, komut enjeksiyonu, SQL enjeksiyonu, tip karışıklığı (varsayılan olarak kuru çalıştırma) |
+| `rt_check_http_security` | HTTP yanıt başlıklarını kontrol et &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, çerez bayrakları |
+| `rt_check_callbacks` | SSRF'yi etkinleştirebilecek callback/webhook URL parametrelerini tespit et &mdash; eksik URL kısıtlamalarını kontrol eder |
+| `rt_check_prompt_injection` | getPrompt() aracılığıyla prompt içeriğini al ve enjeksiyon kalıpları, şablon sözdizimi, tehlikeli argümanlar için tara |
+| `rt_check_instructions` | Başlatma sırasındaki sunucu talimatlarını zehirleme, sosyal mühendislik, aşırı uzunluk açısından analiz et |
+| `rt_check_tool_mutation` | Yapılandırılabilir gecikmeyle çift anlık görüntü karşılaştırması &mdash; araç eklemeleri, kaldırmaları, açıklama değişikliklerini tespit et (halı çekme) |
+| `rt_check_rate_limiting` | Hız sınırlamasını test etmek için hızlı ping() patlamaları gönder &mdash; sınırsız istek kabul eden sunucuları işaretle |
+| `rt_check_protocol_version` | Başlatmadan sunucu adını/sürümünü kontrol et &mdash; eksik bilgiyi, güncel olmayan SDK sürümlerini işaretle |
 
 </details>
 
@@ -415,7 +427,7 @@ Ajan: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `report_generate` | Tarama bulgularından JSON, Markdown veya SARIF 2.1.0 formatında güvenlik raporu oluştur |
 | `report_owasp_compliance` | OWASP MCP Top 10 uyumluluk raporu oluştur &mdash; tüm bulguları MCP01-MCP10 kategorilerine eşle |
 | `report_compare` | Zaman içinde yeni, düzeltilmiş ve değişmemiş bulguları göstermek için iki güvenlik raporunu karşılaştır |
-| `report_full_audit` | 43 kontrolün tümünü çalıştır ve OWASP puanlamasıyla kapsamlı bir güvenlik denetim raporu oluştur |
+| `report_full_audit` | 55 kontrolün tümünü çalıştır ve OWASP puanlamasıyla kapsamlı bir güvenlik denetim raporu oluştur |
 
 </details>
 
@@ -424,7 +436,7 @@ Ajan: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 | Araç | Açıklama |
 |------|-------------|
-| `scanner_list_checks` | Kategoriler, önem düzeyleri ve OWASP MCP Top 10 eşlemesiyle 43 güvenlik kontrolünün tümünü listele |
+| `scanner_list_checks` | Kategoriler, önem düzeyleri ve OWASP MCP Top 10 eşlemesiyle 55 güvenlik kontrolünün tümünü listele |
 | `scanner_owasp_mapping` | Eksiksiz OWASP MCP Top 10 eşlemesini göster &mdash; hangi tarayıcı kontrollerinin her risk kategorisini kapsadığı |
 
 </details>
@@ -433,20 +445,20 @@ Ajan: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner, 43 kontrolün tümünü [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) risk çerçevesine eşler.
+mcp-security-scanner, 55 kontrolün tümünü [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) risk çerçevesine eşler.
 
 | ID | Risk | Tarayıcı Kontrolleri |
 |----|------|----------------|
-| **MCP01** | Araç Zehirleme | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | Aşırı İzinler | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | Araç Gölgeleme | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | Güvensiz Kimlik Bilgisi Depolama | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | Veri Sızıntısı | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | Kod Enjeksiyonu | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | Üçüncü Taraf / Tedarik Zinciri Riski | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | Yetersiz Günlük Kaydı | `sast_missing_logging` |
-| **MCP09** | Halı Çekme / Araç Değişikliği | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | Sunucu Yanlış Yapılandırması | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | Araç Zehirleme | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | Aşırı İzinler | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | Araç Gölgeleme | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | Güvensiz Kimlik Bilgisi Depolama | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | Veri Sızıntısı | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | Kod Enjeksiyonu | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | Üçüncü Taraf / Tedarik Zinciri Riski | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | Yetersiz Günlük Kaydı | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Halı Çekme / Araç Değişikliği | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | Sunucu Yanlış Yapılandırması | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # Yardımı göster
 mcp-security-scanner --help
 
-# 43 aracın tümünü listele
+# 55 aracın tümünü listele
 mcp-security-scanner --list
 
 # Tek bir aracı doğrudan çalıştır
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # Kolaylık komutları
-mcp-security-scanner --full-audit .           # Tam güvenlik denetimi (43 kontrolün tümü)
+mcp-security-scanner --full-audit .           # Tam güvenlik denetimi (55 kontrolün tümü)
 mcp-security-scanner --scan-source src        # Yalnızca statik analiz
 mcp-security-scanner --scan-deps .            # Yalnızca bağımlılık denetimi
 mcp-security-scanner --scan-config config.json  # Yalnızca yapılandırma denetimi
@@ -484,7 +496,7 @@ src/
   index.ts                    # CLI giriş noktası (--help, --list, --tool, --full-audit, stdio server)
   protocol/
     mcp-server.ts             # MCP sunucu kurulumu (stdio aktarımı)
-    tools.ts                  # Araç kayıt defteri — 43 aracın tümü burada birleştirilir
+    tools.ts                  # Araç kayıt defteri — 55 aracın tümü burada birleştirilir
   types/
     index.ts                  # Paylaşılan tipler (ToolDef, ToolContext, ToolResult)
     findings.ts               # Bulgu önem derecesi, kategori, OWASP eşleme tipleri
@@ -498,7 +510,7 @@ src/
     crypto.ts                 # Araç pinleme için SHA-256 hash'leme
     fs-helpers.ts             # Dosya sistemi yardımcıları (glob, read, permissions)
     levenshtein.ts            # Typosquatting tespiti için Levenshtein mesafesi
-  runtime/                    # Runtime Inspection araçları (11)
+  runtime/                    # Runtime Inspection araçları (23)
     index.ts                  # Araç tanımları ve işleyicileri
     client.ts                 # Hedef sunuculara bağlanmak için MCP istemcisi
     pinning.ts                # SHA-256 araç tanımı pinleme ve doğrulama
@@ -631,7 +643,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>6 kategoride 43 araç</b></td>
+<td><b>6 kategoride 55 araç</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +660,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | Güvenlik açığı istihbaratı | 23 araç, 5 kaynak |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT & keşif | 37 araç, 12 kaynak |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | Dark web & tehdit istihbaratı | 66 araç, 16 kaynak |
-| **mcp-security-scanner** | **MCP sunucu güvenlik taraması** | **43 araç, 6 kategori** |
+| **mcp-security-scanner** | **MCP sunucu güvenlik taraması** | **55 araç, 6 kategori** |
 
 ---
 

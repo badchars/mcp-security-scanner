@@ -47,7 +47,7 @@
   <a href="#有何不同">有何不同</a> &bull;
   <a href="#快速开始">快速开始</a> &bull;
   <a href="#ai-能做什么">AI 能做什么</a> &bull;
-  <a href="#工具参考43-个工具">工具 (43)</a> &bull;
+  <a href="#工具参考55-个工具">工具 (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#架构">架构</a> &bull;
   <a href="CHANGELOG.md">更新日志</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Tools">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Tools">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@ MCP 安全是一个关键缺口。攻击面是真实存在且不断增长的：
   总计：每个服务器需要数小时，大多数细微问题都会遗漏
 ```
 
-**mcp-security-scanner** 为您的 AI 代理提供跨 6 个类别的 43 个工具。代理连接到任何 MCP 服务器，实时检查工具，使用基于 AST 的静态分析扫描源代码，审计配置，检查依赖项，并生成带有 OWASP MCP Top 10 合规性评分的报告 &mdash; 所有这些都在一次对话中完成。
+**mcp-security-scanner** 为您的 AI 代理提供跨 6 个类别的 55 个工具。代理连接到任何 MCP 服务器，实时检查工具，使用基于 AST 的静态分析扫描源代码，审计配置，检查依赖项，并生成带有 OWASP MCP Top 10 合规性评分的报告 &mdash; 所有这些都在一次对话中完成。
 
 ```
 使用 mcp-security-scanner：
@@ -159,7 +159,7 @@ MCP 安全是一个关键缺口。攻击面是真实存在且不断增长的：
 <tr>
 <td><b>合规性</b></td>
 <td>无标准工具</td>
-<td>OWASP MCP Top 10 映射 &mdash; 跨 10 个风险类别的 43 项检查</td>
+<td>OWASP MCP Top 10 映射 &mdash; 跨 10 个风险类别的 55 项检查</td>
 </tr>
 <tr>
 <td><b>报告</b></td>
@@ -191,7 +191,7 @@ bun install
 
 ### 无需环境变量
 
-mcp-security-scanner 需要**零配置**。无需 API 密钥、令牌或外部服务。所有 43 个工具完全在您的本地机器上运行。
+mcp-security-scanner 需要**零配置**。无需 API 密钥、令牌或外部服务。所有 55 个工具完全在您的本地机器上运行。
 
 ### 连接到您的 AI 代理
 
@@ -335,10 +335,10 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 ---
 
-## 工具参考（43 个工具）
+## 工具参考（55 个工具）
 
 <details open>
-<summary><b>运行时检查（11）&mdash; 无需 API 密钥</b></summary>
+<summary><b>运行时检查（23）&mdash; 无需 API 密钥</b></summary>
 
 | 工具 | 描述 |
 |------|-------------|
@@ -353,6 +353,18 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 | `rt_verify_pins` | 针对先前保存的固定值验证当前工具定义，以检测撤销修改 |
 | `rt_check_auth` | 分析服务器身份验证和授权机制 |
 | `rt_check_resource_exposure` | 检查通过 MCP 资源端点暴露的敏感资源 |
+| `rt_check_oauth` | 测试 HTTP/SSE 服务器是否验证 OAuth 令牌 &mdash; 发送无令牌、无效令牌和伪造的 JWT（alg:none） |
+| `rt_check_tls` | 检查 TLS 证书 &mdash; 过期、自签名、弱签名（SHA-1）、短密钥（<2048 位）、纯 HTTP |
+| `rt_check_capabilities` | 检查服务器能力 &mdash; 实验性功能、动态工具更改（listChanged）、日志记录、采样 |
+| `rt_check_resource_content` | 通过 readResource() 读取实际资源内容并扫描投毒、ANSI、Unicode 隐写术、超大内容 |
+| `rt_fuzz_tools` | 使用边界情况输入对工具进行模糊测试 &mdash; 路径遍历、命令注入、SQL 注入、类型混淆（默认模拟运行） |
+| `rt_check_http_security` | 检查 HTTP 响应头 &mdash; HSTS、CORS、X-Content-Type-Options、Cache-Control、cookie 标志 |
+| `rt_check_callbacks` | 检测可能导致 SSRF 的回调/webhook URL 参数 &mdash; 检查缺少的 URL 约束 |
+| `rt_check_prompt_injection` | 通过 getPrompt() 获取提示内容并扫描注入模式、模板语法、危险参数 |
+| `rt_check_instructions` | 分析初始化时的服务器指令，检测投毒、社会工程、过长内容 |
+| `rt_check_tool_mutation` | 可配置延迟的双快照比较 &mdash; 检测工具添加、删除、描述更改（撤销攻击） |
+| `rt_check_rate_limiting` | 发送快速 ping() 突发请求测试速率限制 &mdash; 标记接受无限请求的服务器 |
+| `rt_check_protocol_version` | 检查初始化时的服务器名称/版本 &mdash; 标记缺失信息、过时的 SDK 版本 |
 
 </details>
 
@@ -414,7 +426,7 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 | `report_generate` | 从扫描发现生成 JSON、Markdown 或 SARIF 2.1.0 格式的安全报告 |
 | `report_owasp_compliance` | 生成 OWASP MCP Top 10 合规性报告 &mdash; 将所有发现映射到 MCP01-MCP10 类别 |
 | `report_compare` | 比较两个安全报告以显示随时间推移的新、已修复和未更改的发现 |
-| `report_full_audit` | 运行所有 43 项检查并生成带有 OWASP 评分的综合安全审计报告 |
+| `report_full_audit` | 运行所有 55 项检查并生成带有 OWASP 评分的综合安全审计报告 |
 
 </details>
 
@@ -423,7 +435,7 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 | 工具 | 描述 |
 |------|-------------|
-| `scanner_list_checks` | 列出所有 43 项安全检查，包括类别、严重性级别和 OWASP MCP Top 10 映射 |
+| `scanner_list_checks` | 列出所有 55 项安全检查，包括类别、严重性级别和 OWASP MCP Top 10 映射 |
 | `scanner_owasp_mapping` | 显示完整的 OWASP MCP Top 10 映射 &mdash; 哪些扫描器检查覆盖每个风险类别 |
 
 </details>
@@ -432,20 +444,20 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner 将所有 43 项检查映射到 [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) 风险框架。
+mcp-security-scanner 将所有 55 项检查映射到 [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) 风险框架。
 
 | ID | 风险 | 扫描器检查 |
 |----|------|----------------|
-| **MCP01** | 工具投毒 | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | 过度权限 | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | 工具遮蔽 | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | 不安全凭证存储 | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | 数据泄漏 | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | 代码注入 | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | 第三方/供应链风险 | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | 日志记录不足 | `sast_missing_logging` |
-| **MCP09** | 撤销攻击/工具修改 | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | 服务器配置错误 | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | 过度权限与令牌管理不当 | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | 工具与范围管理不当 | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | 通过描述注入的工具投毒 | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | 供应链与依赖项漏洞 | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | 命令注入与代码执行 | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | 上下文与工具遮蔽 | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | 身份验证与传输安全不足 | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | 日志记录与错误处理不足 | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | 影子服务器与未授权 MCP 端点 | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | 上下文过度共享与数据暴露 | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -458,7 +470,7 @@ mcp-security-scanner
 # 显示帮助
 mcp-security-scanner --help
 
-# 列出所有 43 个工具
+# 列出所有 55 个工具
 mcp-security-scanner --list
 
 # 直接运行单个工具
@@ -467,7 +479,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # 便捷命令
-mcp-security-scanner --full-audit .           # 完整安全审计（所有 43 项检查）
+mcp-security-scanner --full-audit .           # 完整安全审计（所有 55 项检查）
 mcp-security-scanner --scan-source src        # 仅静态分析
 mcp-security-scanner --scan-deps .            # 仅依赖项审计
 mcp-security-scanner --scan-config config.json  # 仅配置审计
@@ -483,26 +495,33 @@ src/
   index.ts                    # CLI 入口点（--help、--list、--tool、--full-audit、stdio 服务器）
   protocol/
     mcp-server.ts             # MCP 服务器设置（stdio 传输）
-    tools.ts                  # 工具注册表 — 所有 43 个工具在此组装
-  types/
-    index.ts                  # 共享类型（ToolDef、ToolContext、ToolResult）
-    findings.ts               # 发现严重性、类别、OWASP 映射类型
+    tools.ts                  # 工具注册表 — 所有 55 个工具在此组装
   data/
     dangerous-sinks.ts        # 用于污点追踪的危险函数漏洞点
     owasp-mcp-top10.ts        # OWASP MCP Top 10 定义和映射
+    callback-patterns.ts      # 回调/webhook URL 模式、模板注入、模糊测试载荷
     poisoning-patterns.ts     # 15+ 种工具投毒检测模式
     popular-packages.ts       # 500+ 个流行的 npm 包用于拼写错误检查
     secret-patterns.ts        # 硬编码秘密检测的正则表达式模式
+  types/
+    index.ts                  # 共享类型（ToolDef、ToolContext、ToolResult）
+    findings.ts               # 发现严重性、类别、OWASP 映射类型
   utils/
     crypto.ts                 # 用于工具固定的 SHA-256 哈希
     fs-helpers.ts             # 文件系统帮助器（glob、读取、权限）
     levenshtein.ts            # 用于拼写错误检测的 Levenshtein 距离
-  runtime/                    # 运行时检查工具（11）
-    index.ts                  # 工具定义和处理程序
-    client.ts                 # 用于连接到目标服务器的 MCP 客户端
+  runtime/                    # 运行时检查工具（23）
+    index.ts                  # 基础工具定义和处理程序（11 个工具）
+    advanced-tools.ts         # 高级工具定义（12 个工具：OAuth、TLS、模糊测试等）
+    shared.ts                 # 共享帮助器（serverSchema、getConnectOpts、formatFindings）
+    client.ts                 # 用于连接到目标服务器的 MCP 客户端（stdio/HTTP/SSE）
     pinning.ts                # SHA-256 工具定义固定和验证
     schema-analyzer.ts        # 工具架构分析（范围蔓延、权限）
     tool-analyzer.ts          # 工具描述分析（投毒、ANSI、Unicode）
+    tls-analyzer.ts           # TLS 证书检查（过期、信任、密钥强度）
+    auth-analyzer.ts          # HTTP 安全头分析（HSTS、CORS、cookie）
+    capabilities-analyzer.ts  # 服务器能力、指令和协议版本
+    content-analyzer.ts       # 资源内容、提示内容和回调分析
   static/                     # 静态分析工具（12）
     index.ts                  # 工具定义和处理程序
     ast-engine.ts             # 用于 TypeScript/JavaScript 解析的 ts-morph AST 引擎
@@ -630,7 +649,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>跨 6 个类别的 43 个工具</b></td>
+<td><b>跨 6 个类别的 55 个工具</b></td>
 </tr>
 </tbody>
 </table>
@@ -647,7 +666,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | 漏洞情报 | 23 个工具，5 个来源 |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT 和侦察 | 37 个工具，12 个来源 |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | 暗网和威胁情报 | 66 个工具，16 个来源 |
-| **mcp-security-scanner** | **MCP 服务器安全扫描** | **43 个工具，6 个类别** |
+| **mcp-security-scanner** | **MCP 服务器安全扫描** | **55 个工具，6 个类别** |
 
 ---
 

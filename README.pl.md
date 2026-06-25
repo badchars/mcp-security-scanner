@@ -47,7 +47,7 @@
   <a href="#czym-się-różni">Czym się różni</a> &bull;
   <a href="#szybki-start">Szybki start</a> &bull;
   <a href="#co-może-zrobić-ai">Co może zrobić AI</a> &bull;
-  <a href="#narzędzia-43-narzędzia">Narzędzia (43)</a> &bull;
+  <a href="#narzędzia-55-narzędzi">Narzędzia (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#architektura">Architektura</a> &bull;
   <a href="CHANGELOG.md">Changelog</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Tools">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Tools">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@ Tradycyjny przepływ pracy bezpieczeństwa MCP:
   Razem: godziny na serwer, większość subtelnych problemów pomijana
 ```
 
-**mcp-security-scanner** daje twojemu agentowi AI 43 narzędzia w 6 kategoriach. Agent łączy się z dowolnym serwerem MCP, inspektuje narzędzia na żywo, skanuje kod źródłowy za pomocą statycznej analizy opartej na AST, audytuje konfiguracje, sprawdza zależności i generuje raporty z wynikami zgodności OWASP MCP Top 10 &mdash; wszystko w jednej rozmowie.
+**mcp-security-scanner** daje twojemu agentowi AI 55 narzędzi w 6 kategoriach. Agent łączy się z dowolnym serwerem MCP, inspektuje narzędzia na żywo, skanuje kod źródłowy za pomocą statycznej analizy opartej na AST, audytuje konfiguracje, sprawdza zależności i generuje raporty z wynikami zgodności OWASP MCP Top 10 &mdash; wszystko w jednej rozmowie.
 
 ```
 Z mcp-security-scanner:
@@ -160,7 +160,7 @@ Istniejące narzędzia sprawdzają jedną wąską rzecz. mcp-security-scanner da
 <tr>
 <td><b>Zgodność</b></td>
 <td>Brak standardowych narzędzi</td>
-<td>Mapowanie OWASP MCP Top 10 &mdash; 43 kontrole w 10 kategoriach ryzyka</td>
+<td>Mapowanie OWASP MCP Top 10 &mdash; 55 kontroli w 10 kategoriach ryzyka</td>
 </tr>
 <tr>
 <td><b>Raporty</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### Brak potrzeby zmiennych środowiskowych
 
-mcp-security-scanner wymaga **zerowej konfiguracji**. Bez kluczy API, bez tokenów, bez usług zewnętrznych. Wszystkie 43 narzędzia działają całkowicie na twojej lokalnej maszynie.
+mcp-security-scanner wymaga **zerowej konfiguracji**. Bez kluczy API, bez tokenów, bez usług zewnętrznych. Wszystkie 55 narzędzi działają całkowicie na twojej lokalnej maszynie.
 
 ### Podłącz do swojego agenta AI
 
@@ -336,10 +336,10 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ---
 
-## Narzędzia (43 narzędzia)
+## Narzędzia (55 narzędzi)
 
 <details open>
-<summary><b>Inspekcja środowiska uruchomieniowego (11) &mdash; Bez klucza API</b></summary>
+<summary><b>Inspekcja środowiska uruchomieniowego (23) &mdash; Bez klucza API</b></summary>
 
 | Narzędzie | Opis |
 |------|-------------|
@@ -354,6 +354,18 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `rt_verify_pins` | Weryfikuj bieżące definicje narzędzi względem wcześniej zapisanych pinów, aby wykryć modyfikacje rug pull |
 | `rt_check_auth` | Analizuj mechanizmy uwierzytelniania i autoryzacji serwera |
 | `rt_check_resource_exposure` | Sprawdź ujawnienie wrażliwych zasobów przez punkty końcowe zasobów MCP |
+| `rt_check_oauth` | Testuj czy serwer HTTP/SSE waliduje tokeny OAuth &mdash; wysyła brak tokenu, nieprawidłowy token i sfałszowany JWT (alg:none) |
+| `rt_check_tls` | Zbadaj certyfikat TLS &mdash; wygasły, samopodpisany, słaby podpis (SHA-1), krótki klucz (<2048 bitów), czysty HTTP |
+| `rt_check_capabilities` | Zbadaj możliwości serwera &mdash; funkcje eksperymentalne, dynamiczne zmiany narzędzi (listChanged), logowanie, sampling |
+| `rt_check_resource_content` | Odczytaj faktyczną zawartość zasobu przez readResource() i skanuj pod kątem zatruwania, ANSI, Unicode stego, zbyt dużej zawartości |
+| `rt_fuzz_tools` | Fuzz-testuj narzędzia z danymi granicznymi &mdash; path traversal, command injection, SQL injection, pomyłka typów (tryb suchy domyślnie) |
+| `rt_check_http_security` | Sprawdź nagłówki odpowiedzi HTTP &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, flagi cookie |
+| `rt_check_callbacks` | Wykryj parametry URL callback/webhook, które mogą umożliwić SSRF &mdash; sprawdza brak ograniczeń URL |
+| `rt_check_prompt_injection` | Pobierz zawartość promptu przez getPrompt() i skanuj pod kątem wzorców wstrzykiwania, składni szablonów, niebezpiecznych argumentów |
+| `rt_check_instructions` | Analizuj instrukcje serwera z inicjalizacji pod kątem zatruwania, inżynierii społecznej, nadmiernej długości |
+| `rt_check_tool_mutation` | Porównanie podwójnych snapshotów z konfigurowalnym opóźnieniem &mdash; wykryj dodania, usunięcia narzędzi, zmiany opisów (rug pull) |
+| `rt_check_rate_limiting` | Wyślij szybkie serie ping() aby przetestować ograniczanie szybkości &mdash; flaguje serwery akceptujące nieograniczone żądania |
+| `rt_check_protocol_version` | Sprawdź nazwę/wersję serwera z inicjalizacji &mdash; flaguje brakujące informacje, przestarzałe wersje SDK |
 
 </details>
 
@@ -415,7 +427,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `report_generate` | Wygeneruj raport bezpieczeństwa w formacie JSON, Markdown lub SARIF 2.1.0 z odkryć skanowania |
 | `report_owasp_compliance` | Wygeneruj raport zgodności OWASP MCP Top 10 &mdash; mapuj wszystkie odkrycia do kategorii MCP01-MCP10 |
 | `report_compare` | Porównaj dwa raporty bezpieczeństwa, aby pokazać nowe, naprawione i niezmienione odkrycia w czasie |
-| `report_full_audit` | Uruchom wszystkie 43 kontrole i wygeneruj kompleksowy raport audytu bezpieczeństwa z punktacją OWASP |
+| `report_full_audit` | Uruchom wszystkie 55 kontroli i wygeneruj kompleksowy raport audytu bezpieczeństwa z punktacją OWASP |
 
 </details>
 
@@ -424,7 +436,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 | Narzędzie | Opis |
 |------|-------------|
-| `scanner_list_checks` | Wypisz wszystkie 43 kontrole bezpieczeństwa z kategoriami, poziomami ważności i mapowaniem OWASP MCP Top 10 |
+| `scanner_list_checks` | Wypisz wszystkie 55 kontroli bezpieczeństwa z kategoriami, poziomami ważności i mapowaniem OWASP MCP Top 10 |
 | `scanner_owasp_mapping` | Pokaż pełne mapowanie OWASP MCP Top 10 &mdash; które kontrole skanera pokrywają każdą kategorię ryzyka |
 
 </details>
@@ -433,20 +445,20 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner mapuje wszystkie 43 kontrole do ramy ryzyk [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
+mcp-security-scanner mapuje wszystkie 55 kontroli do ramy ryzyk [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
 
 | ID | Ryzyko | Kontrole skanera |
 |----|------|----------------|
-| **MCP01** | Zatruwanie narzędzi | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | Nadmierne uprawnienia | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | Shadowing narzędzi | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | Niebezpieczne przechowywanie poświadczeń | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | Wyciek danych | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | Injection kodu | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | Ryzyko stron trzecich / łańcucha dostaw | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | Niewystarczające logowanie | `sast_missing_logging` |
-| **MCP09** | Rug Pull / modyfikacja narzędzi | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | Błędna konfiguracja serwera | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | Zatruwanie narzędzi | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | Nadmierne uprawnienia | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | Shadowing narzędzi | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | Niebezpieczne przechowywanie poświadczeń | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | Wyciek danych | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | Injection kodu | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | Ryzyko stron trzecich / łańcucha dostaw | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | Niewystarczające logowanie | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Rug Pull / modyfikacja narzędzi | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | Błędna konfiguracja serwera | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # Pokaż pomoc
 mcp-security-scanner --help
 
-# Wypisz wszystkie 43 narzędzia
+# Wypisz wszystkie 55 narzędzi
 mcp-security-scanner --list
 
 # Uruchom pojedyncze narzędzie bezpośrednio
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # Polecenia wygodne
-mcp-security-scanner --full-audit .           # Pełny audyt bezpieczeństwa (wszystkie 43 kontrole)
+mcp-security-scanner --full-audit .           # Pełny audyt bezpieczeństwa (wszystkie 55 kontroli)
 mcp-security-scanner --scan-source src        # Tylko analiza statyczna
 mcp-security-scanner --scan-deps .            # Tylko audyt zależności
 mcp-security-scanner --scan-config config.json  # Tylko audyt konfiguracji
@@ -484,7 +496,7 @@ src/
   index.ts                    # Punkt wejścia CLI (--help, --list, --tool, --full-audit, serwer stdio)
   protocol/
     mcp-server.ts             # Konfiguracja serwera MCP (transport stdio)
-    tools.ts                  # Rejestr narzędzi — wszystkie 43 narzędzia zmontowane tutaj
+    tools.ts                  # Rejestr narzędzi — wszystkie 55 narzędzi zmontowane tutaj
   types/
     index.ts                  # Wspólne typy (ToolDef, ToolContext, ToolResult)
     findings.ts               # Typy ważności odkryć, kategorii, mapowania OWASP
@@ -498,12 +510,24 @@ src/
     crypto.ts                 # Hashowanie SHA-256 do przypinania narzędzi
     fs-helpers.ts             # Pomocniki systemu plików (glob, read, permissions)
     levenshtein.ts            # Odległość Levenshteina do wykrywania typosquattingu
-  runtime/                    # Narzędzia inspekcji środowiska uruchomieniowego (11)
+  runtime/                    # Narzędzia inspekcji środowiska uruchomieniowego (23)
     index.ts                  # Definicje i handlery narzędzi
     client.ts                 # Klient MCP do łączenia się z serwerami docelowymi
     pinning.ts                # Przypinanie i weryfikacja definicji narzędzi SHA-256
     schema-analyzer.ts        # Analiza schematów narzędzi (scope creep, uprawnienia)
     tool-analyzer.ts          # Analiza opisów narzędzi (zatruwanie, ANSI, Unicode)
+    oauth-checker.ts          # Test walidacji tokenów OAuth
+    tls-checker.ts            # Inspekcja certyfikatu TLS
+    capabilities-checker.ts   # Analiza możliwości serwera
+    resource-content-checker.ts # Skanowanie zatruwania zawartości zasobów
+    fuzzer.ts                 # Fuzz-testowanie narzędzi z danymi granicznymi
+    http-security-checker.ts  # Sprawdzanie nagłówków bezpieczeństwa HTTP
+    callback-checker.ts       # Wykrywanie SSRF callback/webhook
+    prompt-injection-checker.ts # Skanowanie wstrzykiwania zawartości promptu
+    instructions-checker.ts   # Analiza zatruwania instrukcji serwera
+    tool-mutation-checker.ts  # Wykrywanie rug pull podwójnym snapshotem
+    rate-limit-checker.ts     # Test ograniczania szybkości
+    protocol-version-checker.ts # Weryfikacja wersji protokołu
   static/                     # Narzędzia analizy statycznej (12)
     index.ts                  # Definicje i handlery narzędzi
     ast-engine.ts             # Silnik AST ts-morph do parsowania TypeScript/JavaScript
@@ -631,7 +655,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>43 narzędzia w 6 kategoriach</b></td>
+<td><b>55 narzędzi w 6 kategoriach</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +672,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | Wywiad o podatnościach | 23 narzędzia, 5 źródeł |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT i rozpoznanie | 37 narzędzi, 12 źródeł |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | Dark web i wywiad o zagrożeniach | 66 narzędzi, 16 źródeł |
-| **mcp-security-scanner** | **Skanowanie bezpieczeństwa serwera MCP** | **43 narzędzia, 6 kategorii** |
+| **mcp-security-scanner** | **Skanowanie bezpieczeństwa serwera MCP** | **55 narzędzi, 6 kategorii** |
 
 ---
 

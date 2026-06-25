@@ -47,7 +47,7 @@
   <a href="#πώς-διαφέρει">Πώς Διαφέρει</a> &bull;
   <a href="#γρήγορη-εκκίνηση">Γρήγορη Εκκίνηση</a> &bull;
   <a href="#τι-μπορεί-να-κάνει-η-ai">Τι Μπορεί να Κάνει η AI</a> &bull;
-  <a href="#αναφορά-εργαλείων-43-εργαλεία">Εργαλεία (43)</a> &bull;
+  <a href="#αναφορά-εργαλείων-55-εργαλεία">Εργαλεία (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#αρχιτεκτονική">Αρχιτεκτονική</a> &bull;
   <a href="CHANGELOG.md">Αρχείο Αλλαγών</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Άδεια"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Εργαλεία">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Εργαλεία">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@
   Σύνολο: ώρες ανά server, κυρίως χάνοντας λεπτά ζητήματα
 ```
 
-Ο **mcp-security-scanner** δίνει στον AI agent σας 43 εργαλεία σε 6 κατηγορίες. Ο agent συνδέεται σε οποιονδήποτε MCP server, επιθεωρεί εργαλεία σε πραγματικό χρόνο, σαρώνει πηγαίο κώδικα με στατική ανάλυση βασισμένη σε AST, ελέγχει διαμορφώσεις, ελέγχει εξαρτήσεις και δημιουργεί αναφορές με βαθμολογίες συμμόρφωσης OWASP MCP Top 10 &mdash; όλα σε μια μόνο συνομιλία.
+Ο **mcp-security-scanner** δίνει στον AI agent σας 55 εργαλεία σε 6 κατηγορίες. Ο agent συνδέεται σε οποιονδήποτε MCP server, επιθεωρεί εργαλεία σε πραγματικό χρόνο, σαρώνει πηγαίο κώδικα με στατική ανάλυση βασισμένη σε AST, ελέγχει διαμορφώσεις, ελέγχει εξαρτήσεις και δημιουργεί αναφορές με βαθμολογίες συμμόρφωσης OWASP MCP Top 10 &mdash; όλα σε μια μόνο συνομιλία.
 
 ```
 Με τον mcp-security-scanner:
@@ -160,7 +160,7 @@
 <tr>
 <td><b>Συμμόρφωση</b></td>
 <td>Κανένα τυποποιημένο εργαλείο</td>
-<td>Αντιστοίχιση OWASP MCP Top 10 &mdash; 43 έλεγχοι σε 10 κατηγορίες κινδύνου</td>
+<td>Αντιστοίχιση OWASP MCP Top 10 &mdash; 55 έλεγχοι σε 10 κατηγορίες κινδύνου</td>
 </tr>
 <tr>
 <td><b>Αναφορές</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### Δεν χρειάζονται μεταβλητές περιβάλλοντος
 
-Ο mcp-security-scanner απαιτεί **μηδενική διαμόρφωση**. Χωρίς κλειδιά API, χωρίς tokens, χωρίς εξωτερικές υπηρεσίες. Και τα 43 εργαλεία εκτελούνται εξ ολοκλήρου στο τοπικό σας μηχάνημα.
+Ο mcp-security-scanner απαιτεί **μηδενική διαμόρφωση**. Χωρίς κλειδιά API, χωρίς tokens, χωρίς εξωτερικές υπηρεσίες. Και τα 55 εργαλεία εκτελούνται εξ ολοκλήρου στο τοπικό σας μηχάνημα.
 
 ### Σύνδεση με τον AI agent σας
 
@@ -336,10 +336,10 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ---
 
-## Αναφορά Εργαλείων (43 εργαλεία)
+## Αναφορά Εργαλείων (55 εργαλεία)
 
 <details open>
-<summary><b>Επιθεώρηση Χρόνου Εκτέλεσης (11) &mdash; Χωρίς κλειδί API</b></summary>
+<summary><b>Επιθεώρηση Χρόνου Εκτέλεσης (23) &mdash; Χωρίς κλειδί API</b></summary>
 
 | Εργαλείο | Περιγραφή |
 |----------|-----------|
@@ -354,6 +354,18 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `rt_verify_pins` | Επαλήθευση τρεχόντων ορισμών εργαλείων έναντι προηγουμένως αποθηκευμένων pins για ανίχνευση τροποποιήσεων rug pull |
 | `rt_check_auth` | Ανάλυση μηχανισμών αυθεντικοποίησης και εξουσιοδότησης του server |
 | `rt_check_resource_exposure` | Έλεγχος έκθεσης ευαίσθητων πόρων μέσω endpoints πόρων MCP |
+| `rt_check_oauth` | Έλεγχος αν ο HTTP/SSE server επαληθεύει OAuth tokens &mdash; αποστολή χωρίς token, μη έγκυρο token και πλαστό JWT (alg:none) |
+| `rt_check_tls` | Επιθεώρηση πιστοποιητικού TLS &mdash; ληγμένο, αυτο-υπογεγραμμένο, αδύναμη υπογραφή (SHA-1), μικρό κλειδί (<2048 bits), απλό HTTP |
+| `rt_check_capabilities` | Επιθεώρηση δυνατοτήτων server &mdash; πειραματικά χαρακτηριστικά, δυναμικές αλλαγές εργαλείων (listChanged), καταγραφή, δειγματοληψία |
+| `rt_check_resource_content` | Ανάγνωση πραγματικού περιεχομένου πόρων μέσω readResource() και σάρωση για δηλητηρίαση, ANSI, στεγανογραφία Unicode, υπερμεγέθη περιεχόμενα |
+| `rt_fuzz_tools` | Δοκιμή fuzz εργαλείων με ακραίες εισόδους &mdash; διέλευση διαδρομής, ένεση εντολών, ένεση SQL, σύγχυση τύπων (dry-run από προεπιλογή) |
+| `rt_check_http_security` | Έλεγχος headers HTTP απόκρισης &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, flags cookies |
+| `rt_check_callbacks` | Ανίχνευση παραμέτρων URL callback/webhook που θα μπορούσαν να ενεργοποιήσουν SSRF &mdash; έλεγχος για ελλιπείς περιορισμούς URL |
+| `rt_check_prompt_injection` | Ανάκτηση περιεχομένου prompt μέσω getPrompt() και σάρωση για μοτίβα ένεσης, σύνταξη template, επικίνδυνα ορίσματα |
+| `rt_check_instructions` | Ανάλυση οδηγιών server από την αρχικοποίηση για δηλητηρίαση, κοινωνική μηχανική, υπερβολικό μήκος |
+| `rt_check_tool_mutation` | Σύγκριση διπλού στιγμιοτύπου με ρυθμιζόμενη καθυστέρηση &mdash; ανίχνευση προσθηκών, αφαιρέσεων, αλλαγών περιγραφής εργαλείων (rug pull) |
+| `rt_check_rate_limiting` | Αποστολή ριπών ταχέων ping() για δοκιμή ορίου ρυθμού &mdash; σημαίνει servers που δέχονται απεριόριστα αιτήματα |
+| `rt_check_protocol_version` | Έλεγχος ονόματος/έκδοσης server από την αρχικοποίηση &mdash; σημαίνει ελλιπείς πληροφορίες, ξεπερασμένες εκδόσεις SDK |
 
 </details>
 
@@ -415,7 +427,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `report_generate` | Δημιουργία αναφοράς ασφαλείας σε μορφή JSON, Markdown ή SARIF 2.1.0 από τα ευρήματα σάρωσης |
 | `report_owasp_compliance` | Δημιουργία αναφοράς συμμόρφωσης OWASP MCP Top 10 &mdash; αντιστοίχιση όλων των ευρημάτων σε κατηγορίες MCP01-MCP10 |
 | `report_compare` | Σύγκριση δύο αναφορών ασφαλείας για εμφάνιση νέων, διορθωμένων και αμετάβλητων ευρημάτων σε βάθος χρόνου |
-| `report_full_audit` | Εκτέλεση και των 43 ελέγχων και δημιουργία ολοκληρωμένης αναφοράς ελέγχου ασφαλείας με βαθμολογία OWASP |
+| `report_full_audit` | Εκτέλεση και των 55 ελέγχων και δημιουργία ολοκληρωμένης αναφοράς ελέγχου ασφαλείας με βαθμολογία OWASP |
 
 </details>
 
@@ -424,7 +436,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 | Εργαλείο | Περιγραφή |
 |----------|-----------|
-| `scanner_list_checks` | Εμφάνιση όλων των 43 ελέγχων ασφαλείας με κατηγορίες, επίπεδα σοβαρότητας και αντιστοίχιση OWASP MCP Top 10 |
+| `scanner_list_checks` | Εμφάνιση όλων των 55 ελέγχων ασφαλείας με κατηγορίες, επίπεδα σοβαρότητας και αντιστοίχιση OWASP MCP Top 10 |
 | `scanner_owasp_mapping` | Εμφάνιση της πλήρους αντιστοίχισης OWASP MCP Top 10 &mdash; ποιοι έλεγχοι σαρωτή καλύπτουν κάθε κατηγορία κινδύνου |
 
 </details>
@@ -433,20 +445,20 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ## OWASP MCP Top 10
 
-Ο mcp-security-scanner αντιστοιχίζει και τους 43 ελέγχους στο πλαίσιο κινδύνων [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
+Ο mcp-security-scanner αντιστοιχίζει και τους 55 ελέγχους στο πλαίσιο κινδύνων [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
 
 | ID | Κίνδυνος | Έλεγχοι Σαρωτή |
 |----|----------|-----------------|
-| **MCP01** | Δηλητηρίαση Εργαλείων | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | Υπερβολικά Δικαιώματα | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | Σκίαση Εργαλείων | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | Μη Ασφαλής Αποθήκευση Διαπιστευτηρίων | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | Διαρροή Δεδομένων | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | Ένεση Κώδικα | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | Κίνδυνος Τρίτων / Αλυσίδα Εφοδιασμού | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | Ανεπαρκής Καταγραφή | `sast_missing_logging` |
-| **MCP09** | Rug Pull / Τροποποίηση Εργαλείων | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | Εσφαλμένη Διαμόρφωση Server | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | Δηλητηρίαση Εργαλείων | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | Υπερβολικά Δικαιώματα | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | Σκίαση Εργαλείων | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | Μη Ασφαλής Αποθήκευση Διαπιστευτηρίων | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | Διαρροή Δεδομένων | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | Ένεση Κώδικα | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | Κίνδυνος Τρίτων / Αλυσίδα Εφοδιασμού | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | Ανεπαρκής Καταγραφή | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Rug Pull / Τροποποίηση Εργαλείων | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | Εσφαλμένη Διαμόρφωση Server | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # Εμφάνιση βοήθειας
 mcp-security-scanner --help
 
-# Εμφάνιση όλων των 43 εργαλείων
+# Εμφάνιση όλων των 55 εργαλείων
 mcp-security-scanner --list
 
 # Εκτέλεση μεμονωμένου εργαλείου απευθείας
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # Εντολές συντόμευσης
-mcp-security-scanner --full-audit .           # Πλήρης έλεγχος ασφαλείας (και οι 43 έλεγχοι)
+mcp-security-scanner --full-audit .           # Πλήρης έλεγχος ασφαλείας (και οι 55 έλεγχοι)
 mcp-security-scanner --scan-source src        # Μόνο στατική ανάλυση
 mcp-security-scanner --scan-deps .            # Μόνο έλεγχος εξαρτήσεων
 mcp-security-scanner --scan-config config.json  # Μόνο έλεγχος διαμόρφωσης
@@ -484,7 +496,7 @@ src/
   index.ts                    # Σημείο εισόδου CLI (--help, --list, --tool, --full-audit, stdio server)
   protocol/
     mcp-server.ts             # Εγκατάσταση MCP server (μεταφορά stdio)
-    tools.ts                  # Μητρώο εργαλείων — και τα 43 εργαλεία συναρμολογούνται εδώ
+    tools.ts                  # Μητρώο εργαλείων — και τα 55 εργαλεία συναρμολογούνται εδώ
   types/
     index.ts                  # Κοινόχρηστοι τύποι (ToolDef, ToolContext, ToolResult)
     findings.ts               # Τύποι σοβαρότητας ευρημάτων, κατηγορίας, αντιστοίχισης OWASP
@@ -498,12 +510,24 @@ src/
     crypto.ts                 # Κατακερματισμός SHA-256 για καρφίτσωμα εργαλείων
     fs-helpers.ts             # Βοηθοί συστήματος αρχείων (glob, ανάγνωση, δικαιώματα)
     levenshtein.ts            # Απόσταση Levenshtein για ανίχνευση typosquatting
-  runtime/                    # Εργαλεία Επιθεώρησης Χρόνου Εκτέλεσης (11)
+  runtime/                    # Εργαλεία Επιθεώρησης Χρόνου Εκτέλεσης (23)
     index.ts                  # Ορισμοί εργαλείων και χειριστές
     client.ts                 # MCP client για σύνδεση σε servers-στόχους
     pinning.ts                # Καρφίτσωμα και επαλήθευση ορισμών εργαλείων SHA-256
     schema-analyzer.ts        # Ανάλυση σχημάτων εργαλείων (διεύρυνση πεδίου, δικαιώματα)
     tool-analyzer.ts          # Ανάλυση περιγραφών εργαλείων (δηλητηρίαση, ANSI, Unicode)
+    oauth-checker.ts          # Έλεγχος επαλήθευσης OAuth token
+    tls-checker.ts            # Επιθεώρηση πιστοποιητικού TLS
+    capabilities-checker.ts   # Έλεγχος δυνατοτήτων server
+    resource-content-checker.ts # Σάρωση περιεχομένου πόρων
+    fuzz-tools.ts             # Δοκιμή fuzz εργαλείων με ακραίες εισόδους
+    http-security-checker.ts  # Έλεγχος headers ασφαλείας HTTP
+    callback-checker.ts       # Ανίχνευση SSRF μέσω callback
+    prompt-injection-checker.ts # Σάρωση ένεσης prompt
+    instructions-checker.ts   # Ανάλυση οδηγιών server
+    tool-mutation-checker.ts  # Ανίχνευση μετάλλαξης εργαλείων (rug pull)
+    rate-limit-checker.ts     # Δοκιμή ορίου ρυθμού
+    protocol-version-checker.ts # Έλεγχος ονόματος/έκδοσης server
   static/                     # Εργαλεία Στατικής Ανάλυσης (12)
     index.ts                  # Ορισμοί εργαλείων και χειριστές
     ast-engine.ts             # Μηχανή AST ts-morph για ανάλυση TypeScript/JavaScript
@@ -631,7 +655,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>43 εργαλεία σε 6 κατηγορίες</b></td>
+<td><b>55 εργαλεία σε 6 κατηγορίες</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +672,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | Πληροφορίες ευπαθειών | 23 εργαλεία, 5 πηγές |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT & αναγνώριση | 37 εργαλεία, 12 πηγές |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | Dark web & πληροφορίες απειλών | 66 εργαλεία, 16 πηγές |
-| **mcp-security-scanner** | **Σάρωση ασφαλείας MCP server** | **43 εργαλεία, 6 κατηγορίες** |
+| **mcp-security-scanner** | **Σάρωση ασφαλείας MCP server** | **55 εργαλεία, 6 κατηγορίες** |
 
 ---
 

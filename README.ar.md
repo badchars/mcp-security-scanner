@@ -47,7 +47,7 @@
   <a href="#كيف-يختلف-هذا">كيف يختلف هذا</a> &bull;
   <a href="#البدء-السريع">البدء السريع</a> &bull;
   <a href="#ماذا-يمكن-للذكاء-الاصطناعي-أن-يفعل">ماذا يمكن للذكاء الاصطناعي أن يفعل</a> &bull;
-  <a href="#مرجع-الأدوات-43-أداة">الأدوات (43)</a> &bull;
+  <a href="#مرجع-الأدوات-55-أداة">الأدوات (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#البنية-المعمارية">البنية المعمارية</a> &bull;
   <a href="CHANGELOG.md">سجل التغييرات</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Tools">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Tools">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@
   المجموع: ساعات لكل خادم، معظمها يفوت المشاكل الدقيقة
 ```
 
-**mcp-security-scanner** يمنح وكيل الذكاء الاصطناعي الخاص بك 43 أداة عبر 6 فئات. يتصل الوكيل بأي خادم MCP، يفحص الأدوات مباشرة، يمسح الكود المصدري بالتحليل الساكن القائم على AST، يدقق الإعدادات، يفحص التبعيات، ويولد تقارير مع درجات امتثال OWASP MCP Top 10 — كل ذلك في محادثة واحدة.
+**mcp-security-scanner** يمنح وكيل الذكاء الاصطناعي الخاص بك 55 أداة عبر 6 فئات. يتصل الوكيل بأي خادم MCP، يفحص الأدوات مباشرة، يمسح الكود المصدري بالتحليل الساكن القائم على AST، يدقق الإعدادات، يفحص التبعيات، ويولد تقارير مع درجات امتثال OWASP MCP Top 10 — كل ذلك في محادثة واحدة.
 
 ```
 مع mcp-security-scanner:
@@ -160,7 +160,7 @@
 <tr>
 <td><b>الامتثال</b></td>
 <td>لا توجد أدوات قياسية</td>
-<td>تخطيط OWASP MCP Top 10 — 43 فحصًا عبر 10 فئات مخاطر</td>
+<td>تخطيط OWASP MCP Top 10 — 55 فحصًا عبر 10 فئات مخاطر</td>
 </tr>
 <tr>
 <td><b>التقارير</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### لا حاجة لمتغيرات البيئة
 
-يتطلب mcp-security-scanner **تكوين صفر**. لا مفاتيح API، لا رموز، لا خدمات خارجية. جميع الأدوات الـ 43 تعمل بالكامل على جهازك المحلي.
+يتطلب mcp-security-scanner **تكوين صفر**. لا مفاتيح API، لا رموز، لا خدمات خارجية. جميع الأدوات الـ 55 تعمل بالكامل على جهازك المحلي.
 
 ### الاتصال بوكيل الذكاء الاصطناعي الخاص بك
 
@@ -336,10 +336,10 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 ---
 
-## مرجع الأدوات (43 أداة)
+## مرجع الأدوات (55 أداة)
 
 <details open>
-<summary><b>فحص وقت التشغيل (11) &mdash; لا يلزم مفتاح API</b></summary>
+<summary><b>فحص وقت التشغيل (23) &mdash; لا يلزم مفتاح API</b></summary>
 
 | الأداة | الوصف |
 |------|-------------|
@@ -354,6 +354,18 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 | `rt_verify_pins` | التحقق من تعريفات الأدوات الحالية مقابل pins المحفوظة مسبقًا لكشف تعديلات rug pull |
 | `rt_check_auth` | تحليل آليات المصادقة والتفويض للخادم |
 | `rt_check_resource_exposure` | فحص التعرض للموارد الحساسة من خلال نقاط نهاية موارد MCP |
+| `rt_check_oauth` | اختبار ما إذا كان خادم HTTP/SSE يتحقق من رموز OAuth — يرسل بدون رمز، رمز غير صالح، و JWT مزور (alg:none) |
+| `rt_check_tls` | فحص شهادة TLS — منتهية الصلاحية، موقعة ذاتيًا، توقيع ضعيف (SHA-1)، مفتاح قصير (<2048 بت)، HTTP عادي |
+| `rt_check_capabilities` | فحص قدرات الخادم — الميزات التجريبية، تغييرات الأدوات الديناميكية (listChanged)، التسجيل، أخذ العينات |
+| `rt_check_resource_content` | قراءة محتوى المورد الفعلي عبر readResource() ومسح التسميم، ANSI، ستيجانوغرافيا Unicode، المحتوى كبير الحجم |
+| `rt_fuzz_tools` | اختبار fuzz للأدوات بمدخلات حالات حافة — اجتياز المسار، حقن الأوامر، حقن SQL، ارتباك الأنواع (تشغيل جاف افتراضيًا) |
+| `rt_check_http_security` | فحص رؤوس استجابة HTTP — HSTS، CORS، X-Content-Type-Options، Cache-Control، أعلام ملفات تعريف الارتباط |
+| `rt_check_callbacks` | كشف معاملات URL الخاصة بالاستدعاء/webhook التي قد تمكن SSRF — التحقق من غياب قيود URL |
+| `rt_check_prompt_injection` | جلب محتوى الموجه عبر getPrompt() ومسح أنماط الحقن، صيغة القوالب، الوسائط الخطرة |
+| `rt_check_instructions` | تحليل تعليمات الخادم من التهيئة للتسميم، الهندسة الاجتماعية، الطول المفرط |
+| `rt_check_tool_mutation` | مقارنة لقطتين مع تأخير قابل للتكوين — كشف إضافة الأدوات، إزالتها، تغيير الأوصاف (rug pull) |
+| `rt_check_rate_limiting` | إرسال دفقات ping() سريعة لاختبار تحديد المعدل — تنبيه للخوادم التي تقبل طلبات غير محدودة |
+| `rt_check_protocol_version` | فحص اسم/إصدار الخادم من التهيئة — تنبيه للمعلومات المفقودة، إصدارات SDK القديمة |
 
 </details>
 
@@ -415,7 +427,7 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 | `report_generate` | إنشاء تقرير أمني بتنسيق JSON أو Markdown أو SARIF 2.1.0 من نتائج المسح |
 | `report_owasp_compliance` | إنشاء تقرير امتثال OWASP MCP Top 10 — تخطيط جميع النتائج إلى فئات MCP01-MCP10 |
 | `report_compare` | مقارنة تقريري أمان لإظهار النتائج الجديدة والثابتة وغير المتغيرة بمرور الوقت |
-| `report_full_audit` | تشغيل جميع الفحوصات الـ 43 وإنشاء تقرير تدقيق أمني شامل مع تسجيل OWASP |
+| `report_full_audit` | تشغيل جميع الفحوصات الـ 55 وإنشاء تقرير تدقيق أمني شامل مع تسجيل OWASP |
 
 </details>
 
@@ -424,7 +436,7 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 | الأداة | الوصف |
 |------|-------------|
-| `scanner_list_checks` | إدراج جميع فحوصات الأمان الـ 43 مع الفئات ومستويات الخطورة وتخطيط OWASP MCP Top 10 |
+| `scanner_list_checks` | إدراج جميع فحوصات الأمان الـ 55 مع الفئات ومستويات الخطورة وتخطيط OWASP MCP Top 10 |
 | `scanner_owasp_mapping` | إظهار تخطيط OWASP MCP Top 10 الكامل — أي فحوصات الماسح الضوئي تغطي كل فئة مخاطر |
 
 </details>
@@ -433,20 +445,20 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 ## OWASP MCP Top 10
 
-يخطط mcp-security-scanner جميع الفحوصات الـ 43 إلى إطار مخاطر [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
+يخطط mcp-security-scanner جميع الفحوصات الـ 55 إلى إطار مخاطر [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
 
 | المعرف | المخاطر | فحوصات الماسح الضوئي |
 |----|------|----------------|
-| **MCP01** | تسميم الأدوات | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | صلاحيات مفرطة | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | تظليل الأدوات | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | تخزين بيانات اعتماد غير آمن | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | تسرب البيانات | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | حقن الكود | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | مخاطر الطرف الثالث / سلسلة التوريد | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | تسجيل غير كافٍ | `sast_missing_logging` |
-| **MCP09** | Rug Pull / تعديل الأداة | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | خطأ في إعدادات الخادم | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | تسميم الأدوات | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | صلاحيات مفرطة | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | تظليل الأدوات | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | تخزين بيانات اعتماد غير آمن | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | تسرب البيانات | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | حقن الكود | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | مخاطر الطرف الثالث / سلسلة التوريد | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | تسجيل غير كافٍ | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Rug Pull / تعديل الأداة | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | خطأ في إعدادات الخادم | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # إظهار المساعدة
 mcp-security-scanner --help
 
-# إدراج جميع الأدوات الـ 43
+# إدراج جميع الأدوات الـ 55
 mcp-security-scanner --list
 
 # تشغيل أداة واحدة مباشرة
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # أوامر الراحة
-mcp-security-scanner --full-audit .           # تدقيق أمني كامل (جميع الفحوصات الـ 43)
+mcp-security-scanner --full-audit .           # تدقيق أمني كامل (جميع الفحوصات الـ 55)
 mcp-security-scanner --scan-source src        # التحليل الساكن فقط
 mcp-security-scanner --scan-deps .            # تدقيق التبعيات فقط
 mcp-security-scanner --scan-config config.json  # تدقيق الإعدادات فقط
@@ -484,7 +496,7 @@ src/
   index.ts                    # نقطة دخول CLI (--help, --list, --tool, --full-audit, خادم stdio)
   protocol/
     mcp-server.ts             # إعداد خادم MCP (نقل stdio)
-    tools.ts                  # سجل الأدوات — جميع الأدوات الـ 43 مجمعة هنا
+    tools.ts                  # سجل الأدوات — جميع الأدوات الـ 55 مجمعة هنا
   types/
     index.ts                  # الأنواع المشتركة (ToolDef, ToolContext, ToolResult)
     findings.ts               # خطورة النتيجة، الفئة، أنواع تخطيط OWASP
@@ -498,12 +510,24 @@ src/
     crypto.ts                 # تجزئة SHA-256 لتثبيت الأدوات
     fs-helpers.ts             # مساعدات نظام الملفات (glob, read, permissions)
     levenshtein.ts            # مسافة Levenshtein لكشف typosquatting
-  runtime/                    # أدوات فحص وقت التشغيل (11)
+  runtime/                    # أدوات فحص وقت التشغيل (23)
     index.ts                  # تعريفات الأدوات ومعالجاتها
     client.ts                 # عميل MCP للاتصال بالخوادم المستهدفة
     pinning.ts                # تثبيت والتحقق من تعريف الأدوات SHA-256
     schema-analyzer.ts        # تحليل مخطط الأدوات (scope creep, permissions)
     tool-analyzer.ts          # تحليل وصف الأدوات (poisoning, ANSI, Unicode)
+    oauth-checker.ts          # التحقق من رموز OAuth (بدون رمز، غير صالح، JWT مزور)
+    tls-checker.ts            # فحص شهادة TLS (منتهية، موقعة ذاتيًا، ضعيفة)
+    capabilities-checker.ts   # فحص قدرات الخادم والميزات التجريبية
+    resource-content-checker.ts # قراءة ومسح محتوى الموارد الفعلي
+    fuzzer.ts                 # اختبار fuzz للأدوات بمدخلات حالات حافة
+    http-security-checker.ts  # فحص رؤوس أمان HTTP
+    callback-checker.ts       # كشف معاملات URL للاستدعاء/webhook
+    prompt-injection-checker.ts # مسح محتوى الموجه لأنماط الحقن
+    instructions-checker.ts   # تحليل تعليمات الخادم
+    mutation-checker.ts       # مقارنة لقطتين لكشف تغييرات الأدوات
+    rate-limit-checker.ts     # اختبار تحديد المعدل بدفقات ping
+    protocol-version-checker.ts # فحص اسم/إصدار الخادم
   static/                     # أدوات التحليل الساكن (12)
     index.ts                  # تعريفات الأدوات ومعالجاتها
     ast-engine.ts             # محرك ts-morph AST لتحليل TypeScript/JavaScript
@@ -631,7 +655,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>43 أداة عبر 6 فئات</b></td>
+<td><b>55 أداة عبر 6 فئات</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +672,8 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | استخبارات الثغرات | 23 أداة، 5 مصادر |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT والاستطلاع | 37 أداة، 12 مصدرًا |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | استخبارات الويب المظلم والتهديدات | 66 أداة، 16 مصدرًا |
-| **mcp-security-scanner** | **فحص أمان خادم MCP** | **43 أداة، 6 فئات** |
+| **mcp-security-scanner** | **فحص أمان خادم MCP** | **55 أداة، 6 فئات** |
+
 
 ---
 

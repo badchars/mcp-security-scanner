@@ -47,7 +47,7 @@
   <a href="#hvordan-det-er-anderledes">Hvordan Det Er Anderledes</a> &bull;
   <a href="#hurtig-start">Hurtig Start</a> &bull;
   <a href="#hvad-ai-kan-gøre">Hvad AI'en Kan Gøre</a> &bull;
-  <a href="#værktøjsreference-43-værktøjer">Værktøjer (43)</a> &bull;
+  <a href="#værktøjsreference-55-værktøjer">Værktøjer (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#arkitektur">Arkitektur</a> &bull;
   <a href="CHANGELOG.md">Ændringslog</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Tools">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Tools">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@ Traditionel MCP-sikkerhedsarbejdsgang:
   Total: timer pr. server, hovedsageligt manglende subtile problemer
 ```
 
-**mcp-security-scanner** giver din AI-agent 43 værktøjer på tværs af 6 kategorier. Agenten forbinder til enhver MCP-server, inspicerer værktøjer live, scanner kildekode med AST-baseret statisk analyse, reviderer konfigurationer, tjekker afhængigheder og genererer rapporter med OWASP MCP Top 10-overensstemmelsesvurderinger &mdash; alt sammen i en enkelt samtale.
+**mcp-security-scanner** giver din AI-agent 55 værktøjer på tværs af 6 kategorier. Agenten forbinder til enhver MCP-server, inspicerer værktøjer live, scanner kildekode med AST-baseret statisk analyse, reviderer konfigurationer, tjekker afhængigheder og genererer rapporter med OWASP MCP Top 10-overensstemmelsesvurderinger &mdash; alt sammen i en enkelt samtale.
 
 ```
 Med mcp-security-scanner:
@@ -160,7 +160,7 @@ Eksisterende værktøjer tjekker én snæver ting. mcp-security-scanner giver di
 <tr>
 <td><b>Overensstemmelse</b></td>
 <td>Ingen standardværktøjer</td>
-<td>OWASP MCP Top 10-kortlægning &mdash; 43 tjek på tværs af 10 risikokategorier</td>
+<td>OWASP MCP Top 10-kortlægning &mdash; 55 tjek på tværs af 10 risikokategorier</td>
 </tr>
 <tr>
 <td><b>Rapporter</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### Ingen miljøvariabler nødvendige
 
-mcp-security-scanner kræver **nul konfiguration**. Ingen API-nøgler, ingen tokens, ingen eksterne tjenester. Alle 43 værktøjer kører udelukkende på din lokale maskine.
+mcp-security-scanner kræver **nul konfiguration**. Ingen API-nøgler, ingen tokens, ingen eksterne tjenester. Alle 55 værktøjer kører udelukkende på din lokale maskine.
 
 ### Forbind til din AI-agent
 
@@ -336,10 +336,10 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ---
 
-## Værktøjsreference (43 værktøjer)
+## Værktøjsreference (55 værktøjer)
 
 <details open>
-<summary><b>Runtime-Inspektion (11) &mdash; Ingen API-nøgle</b></summary>
+<summary><b>Runtime-Inspektion (23) &mdash; Ingen API-nøgle</b></summary>
 
 | Værktøj | Beskrivelse |
 |------|-------------|
@@ -354,6 +354,18 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `rt_verify_pins` | Verificer nuværende værktøjsdefinitioner mod tidligere gemte pins for at detektere rug pull-modificeringer |
 | `rt_check_auth` | Analyser serverautentifikations- og autorisationsmekanismer |
 | `rt_check_resource_exposure` | Tjek for sensitiv ressourceeksponering gennem MCP-ressourceendpoints |
+| `rt_check_oauth` | Test om HTTP/SSE-server validerer OAuth-tokens &mdash; sender intet token, ugyldigt token og forfalsket JWT (alg:none) |
+| `rt_check_tls` | Inspicér TLS-certifikat &mdash; udløbet, selvsigneret, svag signatur (SHA-1), kort nøgle (<2048 bits), rent HTTP |
+| `rt_check_capabilities` | Inspicér serverkapabiliteter &mdash; eksperimentelle funktioner, dynamiske værktøjsændringer (listChanged), logning, sampling |
+| `rt_check_resource_content` | Læs faktisk ressourceindhold via readResource() og scan for forgiftning, ANSI, Unicode-stego, overdimensioneret indhold |
+| `rt_fuzz_tools` | Fuzz-test værktøjer med grænsetilfælde-input &mdash; path traversal, command injection, SQL injection, typeforvirring (tørkørsel som standard) |
+| `rt_check_http_security` | Tjek HTTP-svarheadere &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, cookie-flag |
+| `rt_check_callbacks` | Detekter callback/webhook URL-parametre, der kan muliggøre SSRF &mdash; tjekker for manglende URL-begrænsninger |
+| `rt_check_prompt_injection` | Hent prompt-indhold via getPrompt() og scan for injektionsmønstre, skabelonsyntaks, farlige argumenter |
+| `rt_check_instructions` | Analyser serverinstruktioner fra initialisering for forgiftning, social engineering, overdreven længde |
+| `rt_check_tool_mutation` | Dobbelt-snapshot-sammenligning med konfigurerbar forsinkelse &mdash; detekter værktøjstilføjelser, -fjernelser, beskrivelses­ændringer (rug pull) |
+| `rt_check_rate_limiting` | Send hurtige ping()-bursts for at teste hastighedsbegrænsning &mdash; markerer servere, der accepterer ubegrænsede anmodninger |
+| `rt_check_protocol_version` | Tjek servernavn/version fra initialisering &mdash; markerer manglende info, forældede SDK-versioner |
 
 </details>
 
@@ -415,7 +427,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `report_generate` | Generer en sikkerhedsrapport i JSON-, Markdown- eller SARIF 2.1.0-format fra scanningsfund |
 | `report_owasp_compliance` | Generer en OWASP MCP Top 10-overensstemmelsesrapport &mdash; kortlæg alle fund til MCP01-MCP10-kategorier |
 | `report_compare` | Sammenlign to sikkerhedsrapporter for at vise nye, rettede og uændrede fund over tid |
-| `report_full_audit` | Kør alle 43 tjek og generer en omfattende sikkerhedsrevisionsrapport med OWASP-scoring |
+| `report_full_audit` | Kør alle 55 tjek og generer en omfattende sikkerhedsrevisionsrapport med OWASP-scoring |
 
 </details>
 
@@ -424,7 +436,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 | Værktøj | Beskrivelse |
 |------|-------------|
-| `scanner_list_checks` | Oplist alle 43 sikkerhedstjek med kategorier, alvorsgrader og OWASP MCP Top 10-kortlægning |
+| `scanner_list_checks` | Oplist alle 55 sikkerhedstjek med kategorier, alvorsgrader og OWASP MCP Top 10-kortlægning |
 | `scanner_owasp_mapping` | Vis den komplette OWASP MCP Top 10-kortlægning &mdash; hvilke scanner-tjek dækker hver risikokategori |
 
 </details>
@@ -433,20 +445,20 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner kortlægger alle 43 tjek til [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) risikorammeværk.
+mcp-security-scanner kortlægger alle 55 tjek til [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) risikorammeværk.
 
 | ID | Risiko | Scanner-Tjek |
 |----|------|----------------|
-| **MCP01** | Tool Poisoning | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | Excessive Permissions | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | Tool Shadowing | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | Insecure Credential Storage | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | Data Leakage | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | Code Injection | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | Third-Party / Supply Chain Risk | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | Insufficient Logging | `sast_missing_logging` |
-| **MCP09** | Rug Pull / Tool Modification | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | Server Misconfiguration | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | Tool Poisoning | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | Excessive Permissions | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | Tool Shadowing | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | Insecure Credential Storage | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | Data Leakage | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | Code Injection | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | Third-Party / Supply Chain Risk | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | Insufficient Logging | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Rug Pull / Tool Modification | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | Server Misconfiguration | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # Vis hjælp
 mcp-security-scanner --help
 
-# Oplist alle 43 værktøjer
+# Oplist alle 55 værktøjer
 mcp-security-scanner --list
 
 # Kør et enkelt værktøj direkte
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # Bekvemmelighedskommandoer
-mcp-security-scanner --full-audit .           # Fuld sikkerhedsrevision (alle 43 tjek)
+mcp-security-scanner --full-audit .           # Fuld sikkerhedsrevision (alle 55 tjek)
 mcp-security-scanner --scan-source src        # Kun statisk analyse
 mcp-security-scanner --scan-deps .            # Kun afhængighedsrevision
 mcp-security-scanner --scan-config config.json  # Kun konfigurationsrevision
@@ -484,7 +496,7 @@ src/
   index.ts                    # CLI-indgangspunkt (--help, --list, --tool, --full-audit, stdio-server)
   protocol/
     mcp-server.ts             # MCP-serveropsætning (stdio-transport)
-    tools.ts                  # Værktøjsregister — alle 43 værktøjer samlet her
+    tools.ts                  # Værktøjsregister — alle 55 værktøjer samlet her
   types/
     index.ts                  # Delte typer (ToolDef, ToolContext, ToolResult)
     findings.ts               # Fund-alvorlighed, kategori, OWASP-kortlægningstyper
@@ -498,12 +510,24 @@ src/
     crypto.ts                 # SHA-256-hashing til værktøjspinning
     fs-helpers.ts             # Filsystemhjælpere (glob, read, permissions)
     levenshtein.ts            # Levenshtein-afstand til typosquatting-detektion
-  runtime/                    # Runtime-Inspektionsværktøjer (11)
+  runtime/                    # Runtime-Inspektionsværktøjer (23)
     index.ts                  # Værktøjsdefinitioner og håndterere
     client.ts                 # MCP-klient til forbindelse til målservere
     pinning.ts                # SHA-256 værktøjsdefinitionspinning og verifikation
     schema-analyzer.ts        # Værktøjsskemaanalyse (scope creep, permissions)
     tool-analyzer.ts          # Værktøjsbeskrivelseanalyse (poisoning, ANSI, Unicode)
+    oauth-checker.ts          # OAuth-tokenvalideringstest
+    tls-checker.ts            # TLS-certifikatinspektion
+    capabilities-checker.ts   # Serverkapabilitetsanalyse
+    resource-content-checker.ts # Ressourceindholdsforgiftningsscanning
+    fuzzer.ts                 # Fuzz-test af værktøjer med grænsetilfælde-input
+    http-security-checker.ts  # HTTP-sikkerhedsheader-tjek
+    callback-checker.ts       # Callback/webhook SSRF-detektion
+    prompt-injection-checker.ts # Prompt-indholdssinjektionsscanning
+    instructions-checker.ts   # Serverinstruktionsforgiftningsanalyse
+    tool-mutation-checker.ts  # Dobbelt-snapshot rug pull-detektion
+    rate-limit-checker.ts     # Hastighedsbegrænsningstest
+    protocol-version-checker.ts # Protokolversionsverifikation
   static/                     # Statiske Analyseværktøjer (12)
     index.ts                  # Værktøjsdefinitioner og håndterere
     ast-engine.ts             # ts-morph AST-motor til TypeScript/JavaScript-parsing
@@ -631,7 +655,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>43 værktøjer på tværs af 6 kategorier</b></td>
+<td><b>55 værktøjer på tværs af 6 kategorier</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +672,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | Sårbarhedsintelligens | 23 værktøjer, 5 kilder |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT & rekognoscering | 37 værktøjer, 12 kilder |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | Dark web & trusselsintelligens | 66 værktøjer, 16 kilder |
-| **mcp-security-scanner** | **MCP-serversikkerhedsscanning** | **43 værktøjer, 6 kategorier** |
+| **mcp-security-scanner** | **MCP-serversikkerhedsscanning** | **55 værktøjer, 6 kategorier** |
 
 ---
 

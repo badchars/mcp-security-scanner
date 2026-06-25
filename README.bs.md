@@ -47,7 +47,7 @@
   <a href="#po-čemu-se-razlikuje">Po čemu se razlikuje</a> &bull;
   <a href="#brzi-početak">Brzi početak</a> &bull;
   <a href="#šta-ai-može-uraditi">Šta AI može uraditi</a> &bull;
-  <a href="#referenca-alata-43-alata">Alati (43)</a> &bull;
+  <a href="#referenca-alata-55-alata">Alati (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#arhitektura">Arhitektura</a> &bull;
   <a href="CHANGELOG.md">Dnevnik promjena</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Licenca"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 alata">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 alata">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@ Tradicionalni tok rada za MCP sigurnost:
   Ukupno: sati po serveru, uz propuštanje suptilnih problema
 ```
 
-**mcp-security-scanner** daje vašem AI agentu 43 alata u 6 kategorija. Agent se povezuje na bilo koji MCP server, vrši inspekciju alata uživo, skenira izvorni kod statičkom analizom zasnovanom na AST-u, revidira konfiguracije, provjerava zavisnosti i generiše izvještaje sa ocjenama usklađenosti sa OWASP MCP Top 10 &mdash; sve u jednom razgovoru.
+**mcp-security-scanner** daje vašem AI agentu 55 alata u 6 kategorija. Agent se povezuje na bilo koji MCP server, vrši inspekciju alata uživo, skenira izvorni kod statičkom analizom zasnovanom na AST-u, revidira konfiguracije, provjerava zavisnosti i generiše izvještaje sa ocjenama usklađenosti sa OWASP MCP Top 10 &mdash; sve u jednom razgovoru.
 
 ```
 Sa mcp-security-scanner-om:
@@ -160,7 +160,7 @@ Postojeći alati provjeravaju jednu usku stvar. mcp-security-scanner daje vašem
 <tr>
 <td><b>Usklađenost</b></td>
 <td>Nema standardnog alata</td>
-<td>OWASP MCP Top 10 mapiranje &mdash; 43 provjere u 10 kategorija rizika</td>
+<td>OWASP MCP Top 10 mapiranje &mdash; 55 provjera u 10 kategorija rizika</td>
 </tr>
 <tr>
 <td><b>Izvještaji</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### Nisu potrebne varijable okruženja
 
-mcp-security-scanner zahtijeva **nula konfiguracije**. Bez API ključeva, bez tokena, bez vanjskih servisa. Svih 43 alata rade u potpunosti na vašem lokalnom računaru.
+mcp-security-scanner zahtijeva **nula konfiguracije**. Bez API ključeva, bez tokena, bez vanjskih servisa. Svih 55 alata rade u potpunosti na vašem lokalnom računaru.
 
 ### Povezivanje sa vašim AI agentom
 
@@ -336,10 +336,10 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ---
 
-## Referenca alata (43 alata)
+## Referenca alata (55 alata)
 
 <details open>
-<summary><b>Inspekcija u toku rada (11) &mdash; Bez API ključa</b></summary>
+<summary><b>Inspekcija u toku rada (23) &mdash; Bez API ključa</b></summary>
 
 | Alat | Opis |
 |------|------|
@@ -354,6 +354,18 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `rt_verify_pins` | Verifikacija trenutnih definicija alata u odnosu na prethodno sačuvane pinove radi detekcije rug pull modifikacija |
 | `rt_check_auth` | Analiza mehanizama autentifikacije i autorizacije servera |
 | `rt_check_resource_exposure` | Provjera izloženosti osjetljivih resursa putem MCP krajnjih tačaka za resurse |
+| `rt_check_oauth` | Testiranje da li HTTP/SSE server validira OAuth tokene &mdash; šalje bez tokena, nevažeći token i lažni JWT (alg:none) |
+| `rt_check_tls` | Inspekcija TLS certifikata &mdash; istekao, samopotpisan, slaba potpis (SHA-1), kratak ključ (<2048 bita), čisti HTTP |
+| `rt_check_capabilities` | Inspekcija mogućnosti servera &mdash; eksperimentalne funkcije, dinamičke promjene alata (listChanged), logiranje, uzorkovanje |
+| `rt_check_resource_content` | Čitanje stvarnog sadržaja resursa putem readResource() i skeniranje na trovanje, ANSI, Unicode stego, prevelik sadržaj |
+| `rt_fuzz_tools` | Fuzz-testiranje alata sa rubnim ulazima &mdash; prolazak kroz putanje, ubacivanje komandi, SQL ubacivanje, zbunjenost tipova (suho pokretanje po zadanom) |
+| `rt_check_http_security` | Provjera HTTP zaglavlja odgovora &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, zastavice kolačića |
+| `rt_check_callbacks` | Detekcija callback/webhook URL parametara koji mogu omogućiti SSRF &mdash; provjera nedostajućih URL ograničenja |
+| `rt_check_prompt_injection` | Dohvaćanje sadržaja prompta putem getPrompt() i skeniranje na obrasce ubacivanja, sintaksu šablona, opasne argumente |
+| `rt_check_instructions` | Analiza serverskih instrukcija iz inicijalizacije na trovanje, socijalni inženjering, prekomjernu dužinu |
+| `rt_check_tool_mutation` | Poređenje dvostrukih snimaka sa podesivim kašnjenjem &mdash; detekcija dodavanja, uklanjanja alata, promjena opisa (rug pull) |
+| `rt_check_rate_limiting` | Slanje brzih ping() rafala za testiranje ograničenja brzine &mdash; označavanje servera koji prihvataju neograničene zahtjeve |
+| `rt_check_protocol_version` | Provjera imena/verzije servera iz inicijalizacije &mdash; označavanje nedostajućih informacija, zastarjelih verzija SDK-a |
 
 </details>
 
@@ -415,7 +427,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `report_generate` | Generisanje sigurnosnog izvještaja u JSON, Markdown ili SARIF 2.1.0 formatu iz nalaza skeniranja |
 | `report_owasp_compliance` | Generisanje izvještaja o usklađenosti sa OWASP MCP Top 10 &mdash; mapiranje svih nalaza na MCP01-MCP10 kategorije |
 | `report_compare` | Poređenje dva sigurnosna izvještaja za prikaz novih, popravljenih i nepromijenjenih nalaza tokom vremena |
-| `report_full_audit` | Pokretanje svih 43 provjera i generisanje sveobuhvatnog izvještaja o sigurnosnoj reviziji sa OWASP ocjenjivanjem |
+| `report_full_audit` | Pokretanje svih 55 provjera i generisanje sveobuhvatnog izvještaja o sigurnosnoj reviziji sa OWASP ocjenjivanjem |
 
 </details>
 
@@ -424,7 +436,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 | Alat | Opis |
 |------|------|
-| `scanner_list_checks` | Prikaz svih 43 sigurnosnih provjera sa kategorijama, nivoima ozbiljnosti i mapiranjem na OWASP MCP Top 10 |
+| `scanner_list_checks` | Prikaz svih 55 sigurnosnih provjera sa kategorijama, nivoima ozbiljnosti i mapiranjem na OWASP MCP Top 10 |
 | `scanner_owasp_mapping` | Prikaz kompletnog mapiranja OWASP MCP Top 10 &mdash; koje provjere skenera pokrivaju svaku kategoriju rizika |
 
 </details>
@@ -433,20 +445,20 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner mapira svih 43 provjera na okvir rizika [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
+mcp-security-scanner mapira svih 55 provjera na okvir rizika [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
 
 | ID | Rizik | Provjere skenera |
 |----|-------|-------------------|
-| **MCP01** | Trovanje alata | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | Prekomjerne dozvole | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | Zasjenjivanje alata | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | Nesigurno čuvanje akreditacija | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | Curenje podataka | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | Ubacivanje koda | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | Rizik trećih strana / lanca snabdijevanja | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | Nedovoljno logiranje | `sast_missing_logging` |
-| **MCP09** | Rug Pull / modifikacija alata | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | Pogrešna konfiguracija servera | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | Trovanje alata | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | Prekomjerne dozvole | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | Zasjenjivanje alata | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | Nesigurno čuvanje akreditacija | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | Curenje podataka | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | Ubacivanje koda | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | Rizik trećih strana / lanca snabdijevanja | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | Nedovoljno logiranje | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Rug Pull / modifikacija alata | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | Pogrešna konfiguracija servera | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # Prikaz pomoći
 mcp-security-scanner --help
 
-# Prikaz svih 43 alata
+# Prikaz svih 55 alata
 mcp-security-scanner --list
 
 # Pokretanje jednog alata direktno
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # Komande prečice
-mcp-security-scanner --full-audit .           # Potpuna sigurnosna revizija (svih 43 provjera)
+mcp-security-scanner --full-audit .           # Potpuna sigurnosna revizija (svih 55 provjera)
 mcp-security-scanner --scan-source src        # Samo statička analiza
 mcp-security-scanner --scan-deps .            # Samo revizija zavisnosti
 mcp-security-scanner --scan-config config.json  # Samo revizija konfiguracije
@@ -484,7 +496,7 @@ src/
   index.ts                    # CLI ulazna tačka (--help, --list, --tool, --full-audit, stdio server)
   protocol/
     mcp-server.ts             # Postavljanje MCP servera (stdio transport)
-    tools.ts                  # Registar alata — svih 43 alata sastavljeno ovdje
+    tools.ts                  # Registar alata — svih 55 alata sastavljeno ovdje
   types/
     index.ts                  # Dijeljeni tipovi (ToolDef, ToolContext, ToolResult)
     findings.ts               # Tipovi za ozbiljnost nalaza, kategoriju, OWASP mapiranje
@@ -498,7 +510,7 @@ src/
     crypto.ts                 # SHA-256 heširanje za pinovanje alata
     fs-helpers.ts             # Pomoćne funkcije za sistem datoteka (glob, čitanje, dozvole)
     levenshtein.ts            # Levenshteinova udaljenost za detekciju typosquattinga
-  runtime/                    # Alati za inspekciju u toku rada (11)
+  runtime/                    # Alati za inspekciju u toku rada (23)
     index.ts                  # Definicije alata i rukovaoci
     client.ts                 # MCP klijent za povezivanje na ciljne servere
     pinning.ts                # SHA-256 pinovanje i verifikacija definicija alata
@@ -631,7 +643,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>43 alata u 6 kategorija</b></td>
+<td><b>55 alata u 6 kategorija</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +660,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | Obavještajni podaci o ranjivostima | 23 alata, 5 izvora |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT i izviđanje | 37 alata, 12 izvora |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | Dark web i obavještajni podaci o prijetnjama | 66 alata, 16 izvora |
-| **mcp-security-scanner** | **Sigurnosno skeniranje MCP servera** | **43 alata, 6 kategorija** |
+| **mcp-security-scanner** | **Sigurnosno skeniranje MCP servera** | **55 alata, 6 kategorija** |
 
 ---
 

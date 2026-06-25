@@ -47,7 +47,7 @@
   <a href="#차별점">차별점</a> &bull;
   <a href="#빠른-시작">빠른 시작</a> &bull;
   <a href="#ai가-할-수-있는-일">AI가 할 수 있는 일</a> &bull;
-  <a href="#도구-참조43개-도구">도구 (43)</a> &bull;
+  <a href="#도구-참조55개-도구">도구 (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#아키텍처">아키텍처</a> &bull;
   <a href="CHANGELOG.md">변경 로그</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Tools">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Tools">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@ MCP 보안은 중요한 격차입니다. 공격 표면은 실제이며 증가하
   총계: 서버당 수 시간, 대부분 미묘한 문제 누락
 ```
 
-**mcp-security-scanner**는 AI 에이전트에게 6개 카테고리에 걸친 43개 도구를 제공합니다. 에이전트는 모든 MCP 서버에 연결하고, 도구를 실시간으로 검사하고, AST 기반 정적 분석으로 소스 코드를 스캔하고, 구성을 감사하고, 종속성을 확인하고, OWASP MCP Top 10 준수 점수가 있는 보고서를 생성합니다 &mdash; 모두 단일 대화에서.
+**mcp-security-scanner**는 AI 에이전트에게 6개 카테고리에 걸친 55개 도구를 제공합니다. 에이전트는 모든 MCP 서버에 연결하고, 도구를 실시간으로 검사하고, AST 기반 정적 분석으로 소스 코드를 스캔하고, 구성을 감사하고, 종속성을 확인하고, OWASP MCP Top 10 준수 점수가 있는 보고서를 생성합니다 &mdash; 모두 단일 대화에서.
 
 ```
 mcp-security-scanner 사용:
@@ -160,7 +160,7 @@ API 키 없음. 외부 호출 없음. 모든 것이 로컬에서 실행됩니다
 <tr>
 <td><b>준수</b></td>
 <td>표준 도구 없음</td>
-<td>OWASP MCP Top 10 매핑 &mdash; 10개 위험 범주에 걸친 43개 검사</td>
+<td>OWASP MCP Top 10 매핑 &mdash; 10개 위험 범주에 걸친 55개 검사</td>
 </tr>
 <tr>
 <td><b>보고서</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### 환경 변수 불필요
 
-mcp-security-scanner는 **제로 구성**이 필요합니다. API 키, 토큰 또는 외부 서비스가 없습니다. 모든 43개 도구가 로컬 머신에서 완전히 실행됩니다.
+mcp-security-scanner는 **제로 구성**이 필요합니다. API 키, 토큰 또는 외부 서비스가 없습니다. 모든 55개 도구가 로컬 머신에서 완전히 실행됩니다.
 
 ### AI 에이전트에 연결
 
@@ -336,10 +336,10 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 ---
 
-## 도구 참조(43개 도구)
+## 도구 참조(55개 도구)
 
 <details open>
-<summary><b>런타임 검사 (11) &mdash; API 키 불필요</b></summary>
+<summary><b>런타임 검사 (23) &mdash; API 키 불필요</b></summary>
 
 | 도구 | 설명 |
 |------|-------------|
@@ -354,6 +354,18 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 | `rt_verify_pins` | 러그 풀 수정을 감지하기 위해 이전에 저장된 고정과 현재 도구 정의를 검증 |
 | `rt_check_auth` | 서버 인증 및 권한 부여 메커니즘 분석 |
 | `rt_check_resource_exposure` | MCP 리소스 엔드포인트를 통한 민감한 리소스 노출 확인 |
+| `rt_check_oauth` | HTTP/SSE 서버가 OAuth 토큰을 검증하는지 테스트 &mdash; 토큰 없음, 유효하지 않은 토큰, 위조된 JWT(alg:none) 전송 |
+| `rt_check_tls` | TLS 인증서 검사 &mdash; 만료됨, 자체 서명됨, 약한 서명(SHA-1), 짧은 키(<2048비트), 평문 HTTP |
+| `rt_check_capabilities` | 서버 기능 검사 &mdash; 실험적 기능, 동적 도구 변경(listChanged), 로깅, 샘플링 |
+| `rt_check_resource_content` | readResource()를 통해 실제 리소스 내용을 읽고 중독, ANSI, Unicode 스테가노그래피, 과도한 크기의 내용을 스캔 |
+| `rt_fuzz_tools` | 엣지 케이스 입력으로 도구를 퍼즈 테스트 &mdash; 경로 탐색, 명령 주입, SQL 주입, 타입 혼동 (기본적으로 드라이 런) |
+| `rt_check_http_security` | HTTP 응답 헤더 확인 &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, 쿠키 플래그 |
+| `rt_check_callbacks` | SSRF를 활성화할 수 있는 콜백/웹훅 URL 매개변수 감지 &mdash; 누락된 URL 제약 확인 |
+| `rt_check_prompt_injection` | getPrompt()를 통해 프롬프트 내용을 가져와 주입 패턴, 템플릿 구문, 위험한 인수를 스캔 |
+| `rt_check_instructions` | 초기화 시 서버 지침을 분석하여 중독, 사회 공학, 과도한 길이를 감지 |
+| `rt_check_tool_mutation` | 구성 가능한 지연을 사용한 이중 스냅샷 비교 &mdash; 도구 추가, 제거, 설명 변경(러그 풀) 감지 |
+| `rt_check_rate_limiting` | 빠른 ping() 버스트를 전송하여 속도 제한 테스트 &mdash; 무제한 요청을 수락하는 서버 표시 |
+| `rt_check_protocol_version` | 초기화 시 서버 이름/버전 확인 &mdash; 누락된 정보, 오래된 SDK 버전 표시 |
 
 </details>
 
@@ -415,7 +427,7 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 | `report_generate` | 스캔 발견에서 JSON, Markdown 또는 SARIF 2.1.0 형식의 보안 보고서 생성 |
 | `report_owasp_compliance` | OWASP MCP Top 10 준수 보고서 생성 &mdash; 모든 발견을 MCP01-MCP10 범주에 매핑 |
 | `report_compare` | 시간 경과에 따른 새로운, 수정된 및 변경되지 않은 발견을 보여주기 위해 두 보안 보고서 비교 |
-| `report_full_audit` | 모든 43개 검사 실행 및 OWASP 점수가 포함된 포괄적인 보안 감사 보고서 생성 |
+| `report_full_audit` | 모든 55개 검사 실행 및 OWASP 점수가 포함된 포괄적인 보안 감사 보고서 생성 |
 
 </details>
 
@@ -424,7 +436,7 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 | 도구 | 설명 |
 |------|-------------|
-| `scanner_list_checks` | 범주, 심각도 수준 및 OWASP MCP Top 10 매핑과 함께 모든 43개 보안 검사 나열 |
+| `scanner_list_checks` | 범주, 심각도 수준 및 OWASP MCP Top 10 매핑과 함께 모든 55개 보안 검사 나열 |
 | `scanner_owasp_mapping` | 전체 OWASP MCP Top 10 매핑 표시 &mdash; 각 위험 범주를 다루는 스캐너 검사 |
 
 </details>
@@ -433,20 +445,20 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner는 모든 43개 검사를 [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) 위험 프레임워크에 매핑합니다.
+mcp-security-scanner는 모든 55개 검사를 [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) 위험 프레임워크에 매핑합니다.
 
 | ID | 위험 | 스캐너 검사 |
 |----|------|----------------|
-| **MCP01** | 도구 중독 | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | 과도한 권한 | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | 도구 섀도잉 | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | 안전하지 않은 자격 증명 저장 | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | 데이터 유출 | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | 코드 주입 | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | 제3자 / 공급망 위험 | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | 로깅 부족 | `sast_missing_logging` |
-| **MCP09** | 러그 풀 / 도구 수정 | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | 서버 구성 오류 | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | 과도한 권한 및 토큰 관리 부실 | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | 도구 및 범위 관리 부실 | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | 설명 주입을 통한 도구 중독 | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | 공급망 및 종속성 취약점 | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | 명령 주입 및 코드 실행 | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | 컨텍스트 및 도구 섀도잉 | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | 인증 및 전송 보안 부족 | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | 로깅 및 오류 처리 부족 | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | 섀도우 서버 및 무단 MCP 엔드포인트 | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | 컨텍스트 과다 공유 및 데이터 노출 | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # 도움말 표시
 mcp-security-scanner --help
 
-# 모든 43개 도구 나열
+# 모든 55개 도구 나열
 mcp-security-scanner --list
 
 # 단일 도구 직접 실행
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # 편의 명령
-mcp-security-scanner --full-audit .           # 전체 보안 감사 (모든 43개 검사)
+mcp-security-scanner --full-audit .           # 전체 보안 감사 (모든 55개 검사)
 mcp-security-scanner --scan-source src        # 정적 분석만
 mcp-security-scanner --scan-deps .            # 종속성 감사만
 mcp-security-scanner --scan-config config.json  # 구성 감사만
@@ -484,13 +496,14 @@ src/
   index.ts                    # CLI 진입점 (--help, --list, --tool, --full-audit, stdio 서버)
   protocol/
     mcp-server.ts             # MCP 서버 설정 (stdio 전송)
-    tools.ts                  # 도구 레지스트리 — 모든 43개 도구가 여기에 조립됨
+    tools.ts                  # 도구 레지스트리 — 모든 55개 도구가 여기에 조립됨
   types/
     index.ts                  # 공유 타입 (ToolDef, ToolContext, ToolResult)
     findings.ts               # 발견 심각도, 범주, OWASP 매핑 타입
   data/
     dangerous-sinks.ts        # 오염 추적을 위한 위험한 함수 싱크
     owasp-mcp-top10.ts        # OWASP MCP Top 10 정의 및 매핑
+    callback-patterns.ts      # 콜백/웹훅 URL 패턴, 템플릿 주입, 퍼즈 페이로드
     poisoning-patterns.ts     # 15+ 도구 중독 감지 패턴
     popular-packages.ts       # 오타 공격 확인을 위한 500+ 인기 npm 패키지
     secret-patterns.ts        # 하드코딩된 비밀 감지를 위한 정규식 패턴
@@ -498,12 +511,18 @@ src/
     crypto.ts                 # 도구 고정을 위한 SHA-256 해싱
     fs-helpers.ts             # 파일 시스템 헬퍼 (glob, 읽기, 권한)
     levenshtein.ts            # 오타 공격 감지를 위한 Levenshtein 거리
-  runtime/                    # 런타임 검사 도구 (11)
-    index.ts                  # 도구 정의 및 핸들러
-    client.ts                 # 대상 서버 연결을 위한 MCP 클라이언트
+  runtime/                    # 런타임 검사 도구 (23)
+    index.ts                  # 기본 도구 정의 및 핸들러 (11개 도구)
+    advanced-tools.ts         # 고급 도구 정의 (12개 도구: OAuth, TLS, 퍼즈 등)
+    shared.ts                 # 공유 헬퍼 (serverSchema, getConnectOpts, formatFindings)
+    client.ts                 # 대상 서버 연결을 위한 MCP 클라이언트 (stdio/HTTP/SSE)
     pinning.ts                # SHA-256 도구 정의 고정 및 검증
     schema-analyzer.ts        # 도구 스키마 분석 (범위 확장, 권한)
     tool-analyzer.ts          # 도구 설명 분석 (중독, ANSI, Unicode)
+    tls-analyzer.ts           # TLS 인증서 검사 (만료, 신뢰, 키 강도)
+    auth-analyzer.ts          # HTTP 보안 헤더 분석 (HSTS, CORS, 쿠키)
+    capabilities-analyzer.ts  # 서버 기능, 지침 및 프로토콜 버전
+    content-analyzer.ts       # 리소스 내용, 프롬프트 내용 및 콜백 분석
   static/                     # 정적 분석 도구 (12)
     index.ts                  # 도구 정의 및 핸들러
     ast-engine.ts             # TypeScript/JavaScript 파싱을 위한 ts-morph AST 엔진
@@ -631,7 +650,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>6개 범주에 걸친 43개 도구</b></td>
+<td><b>6개 범주에 걸친 55개 도구</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +667,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | 취약점 인텔리전스 | 23개 도구, 5개 소스 |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT 및 정찰 | 37개 도구, 12개 소스 |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | 다크웹 및 위협 인텔리전스 | 66개 도구, 16개 소스 |
-| **mcp-security-scanner** | **MCP 서버 보안 스캔** | **43개 도구, 6개 범주** |
+| **mcp-security-scanner** | **MCP 서버 보안 스캔** | **55개 도구, 6개 범주** |
 
 ---
 

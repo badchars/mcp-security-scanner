@@ -47,7 +47,7 @@
   <a href="#ความแตกต่าง">ความแตกต่าง</a> &bull;
   <a href="#เริ่มต้นอย่างรวดเร็ว">เริ่มต้นอย่างรวดเร็ว</a> &bull;
   <a href="#สิ่งที่-ai-สามารถทำได้">สิ่งที่ AI สามารถทำได้</a> &bull;
-  <a href="#รายการเครื่องมือ-43-เครื่องมือ">เครื่องมือ (43)</a> &bull;
+  <a href="#รายการเครื่องมือ-55-เครื่องมือ">เครื่องมือ (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#สถาปัตยกรรม">สถาปัตยกรรม</a> &bull;
   <a href="CHANGELOG.md">Changelog</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Tools">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Tools">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@
   รวม: ใช้เวลาหลายชั่วโมงต่อเซิร์ฟเวอร์ พลาดปัญหาที่ละเอียดอ่อนส่วนใหญ่
 ```
 
-**mcp-security-scanner** มอบเครื่องมือ 43 ชิ้นให้กับ AI agent ของคุณใน 6 หมวดหมู่ Agent เชื่อมต่อกับเซิร์ฟเวอร์ MCP ใดก็ได้ ตรวจสอบเครื่องมือแบบสด สแกนซอร์สโค้ดด้วยการวิเคราะห์แบบสแตติกด้วย AST ตรวจสอบคอนฟิก ตรวจสอบ dependencies และสร้างรายงานพร้อมคะแนนความสอดคล้อง OWASP MCP Top 10 &mdash; ทั้งหมดในการสนทนาเดียว
+**mcp-security-scanner** มอบเครื่องมือ 55 ชิ้นให้กับ AI agent ของคุณใน 6 หมวดหมู่ Agent เชื่อมต่อกับเซิร์ฟเวอร์ MCP ใดก็ได้ ตรวจสอบเครื่องมือแบบสด สแกนซอร์สโค้ดด้วยการวิเคราะห์แบบสแตติกด้วย AST ตรวจสอบคอนฟิก ตรวจสอบ dependencies และสร้างรายงานพร้อมคะแนนความสอดคล้อง OWASP MCP Top 10 &mdash; ทั้งหมดในการสนทนาเดียว
 
 ```
 ด้วย mcp-security-scanner:
@@ -160,7 +160,7 @@
 <tr>
 <td><b>การปฏิบัติตามข้อกำหนด</b></td>
 <td>ไม่มีเครื่องมือมาตรฐาน</td>
-<td>การแมป OWASP MCP Top 10 &mdash; การตรวจสอบ 43 รายการใน 10 หมวดความเสี่ยง</td>
+<td>การแมป OWASP MCP Top 10 &mdash; การตรวจสอบ 55 รายการใน 10 หมวดความเสี่ยง</td>
 </tr>
 <tr>
 <td><b>รายงาน</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### ไม่ต้องการตัวแปรสภาพแวดล้อม
 
-mcp-security-scanner ต้องการ **การกำหนดค่าเป็นศูนย์** ไม่ต้องใช้ API keys, โทเค็น, บริการภายนอก เครื่องมือทั้ง 43 ชิ้นทำงานทั้งหมดบนเครื่องของคุณ
+mcp-security-scanner ต้องการ **การกำหนดค่าเป็นศูนย์** ไม่ต้องใช้ API keys, โทเค็น, บริการภายนอก เครื่องมือทั้ง 55 ชิ้นทำงานทั้งหมดบนเครื่องของคุณ
 
 ### เชื่อมต่อกับ AI agent ของคุณ
 
@@ -336,10 +336,10 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ---
 
-## รายการเครื่องมือ (43 เครื่องมือ)
+## รายการเครื่องมือ (55 เครื่องมือ)
 
 <details open>
-<summary><b>Runtime Inspection (11) &mdash; ไม่ต้องใช้ API key</b></summary>
+<summary><b>Runtime Inspection (23) &mdash; ไม่ต้องใช้ API key</b></summary>
 
 | เครื่องมือ | คำอธิบาย |
 |------|-------------|
@@ -354,6 +354,18 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `rt_verify_pins` | ตรวจสอบคำจำกัดความเครื่องมือปัจจุบันกับ pins ที่บันทึกไว้ก่อนหน้าเพื่อตรวจจับการแก้ไขแบบ rug pull |
 | `rt_check_auth` | วิเคราะห์กลไกการยืนยันตัวตนและการอนุญาตของเซิร์ฟเวอร์ |
 | `rt_check_resource_exposure` | ตรวจสอบการเปิดเผยทรัพยากรที่ละเอียดอ่อนผ่านจุดสิ้นสุดทรัพยากร MCP |
+| `rt_check_oauth` | ทดสอบว่าเซิร์ฟเวอร์ HTTP/SSE ตรวจสอบโทเค็น OAuth หรือไม่ &mdash; ส่งไม่มีโทเค็น, โทเค็นที่ไม่ถูกต้อง และ JWT ปลอม (alg:none) |
+| `rt_check_tls` | ตรวจสอบใบรับรอง TLS &mdash; หมดอายุ, self-signed, ลายเซ็นที่อ่อนแอ (SHA-1), คีย์สั้น (<2048 บิต), HTTP ธรรมดา |
+| `rt_check_capabilities` | ตรวจสอบความสามารถของเซิร์ฟเวอร์ &mdash; ฟีเจอร์ทดลอง, การเปลี่ยนแปลงเครื่องมือแบบไดนามิก (listChanged), การบันทึก, การสุ่มตัวอย่าง |
+| `rt_check_resource_content` | อ่านเนื้อหาทรัพยากรจริงผ่าน readResource() และสแกนหาการวางยาพิษ, ANSI, Unicode steganography, เนื้อหาขนาดใหญ่เกินไป |
+| `rt_fuzz_tools` | Fuzz-test เครื่องมือด้วย edge-case inputs &mdash; path traversal, command injection, SQL injection, type confusion (dry-run โดยค่าเริ่มต้น) |
+| `rt_check_http_security` | ตรวจสอบเฮดเดอร์ HTTP response &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, cookie flags |
+| `rt_check_callbacks` | ตรวจจับพารามิเตอร์ URL ของ callback/webhook ที่อาจเปิดใช้งาน SSRF &mdash; ตรวจสอบการขาดข้อจำกัด URL |
+| `rt_check_prompt_injection` | ดึงเนื้อหา prompt ผ่าน getPrompt() และสแกนหารูปแบบการฉีด, ไวยากรณ์ template, อาร์กิวเมนต์ที่อันตราย |
+| `rt_check_instructions` | วิเคราะห์คำสั่งเซิร์ฟเวอร์จากการเริ่มต้นสำหรับการวางยาพิษ, วิศวกรรมสังคม, ความยาวที่มากเกินไป |
+| `rt_check_tool_mutation` | การเปรียบเทียบ snapshot คู่พร้อมดีเลย์ที่กำหนดค่าได้ &mdash; ตรวจจับการเพิ่ม, การลบ, การเปลี่ยนแปลงคำอธิบายเครื่องมือ (rug pull) |
+| `rt_check_rate_limiting` | ส่ง ping() burst อย่างรวดเร็วเพื่อทดสอบ rate limiting &mdash; แจ้งเตือนเซิร์ฟเวอร์ที่ยอมรับคำขอไม่จำกัด |
+| `rt_check_protocol_version` | ตรวจสอบชื่อ/เวอร์ชันเซิร์ฟเวอร์จากการเริ่มต้น &mdash; แจ้งเตือนข้อมูลที่ขาดหายไป, เวอร์ชัน SDK ที่ล้าสมัย |
 
 </details>
 
@@ -415,7 +427,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `report_generate` | สร้างรายงานความปลอดภัยในรูปแบบ JSON, Markdown หรือ SARIF 2.1.0 จากการค้นพบการสแกน |
 | `report_owasp_compliance` | สร้างรายงานความสอดคล้อง OWASP MCP Top 10 &mdash; แมปการค้นพบทั้งหมดเป็นหมวดหมู่ MCP01-MCP10 |
 | `report_compare` | เปรียบเทียบรายงานความปลอดภัยสองรายงานเพื่อแสดงการค้นพบใหม่ ที่แก้ไขแล้ว และไม่เปลี่ยนแปลงตลอดเวลา |
-| `report_full_audit` | รันการตรวจสอบทั้ง 43 รายการและสร้างรายงานการตรวจสอบความปลอดภัยที่ครอบคลุมพร้อมคะแนน OWASP |
+| `report_full_audit` | รันการตรวจสอบทั้ง 55 รายการและสร้างรายงานการตรวจสอบความปลอดภัยที่ครอบคลุมพร้อมคะแนน OWASP |
 
 </details>
 
@@ -424,7 +436,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 | เครื่องมือ | คำอธิบาย |
 |------|-------------|
-| `scanner_list_checks` | แสดงรายการการตรวจสอบความปลอดภัยทั้ง 43 รายการพร้อมหมวดหมู่ ระดับความรุนแรง และการแมป OWASP MCP Top 10 |
+| `scanner_list_checks` | แสดงรายการการตรวจสอบความปลอดภัยทั้ง 55 รายการพร้อมหมวดหมู่ ระดับความรุนแรง และการแมป OWASP MCP Top 10 |
 | `scanner_owasp_mapping` | แสดงการแมป OWASP MCP Top 10 ที่สมบูรณ์ &mdash; การตรวจสอบสแกนเนอร์ใดครอบคลุมแต่ละหมวดความเสี่ยง |
 
 </details>
@@ -433,20 +445,20 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner แมปการตรวจสอบทั้ง 43 รายการเป็นกรอบความเสี่ยง [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/)
+mcp-security-scanner แมปการตรวจสอบทั้ง 55 รายการเป็นกรอบความเสี่ยง [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/)
 
 | ID | ความเสี่ยง | การตรวจสอบสแกนเนอร์ |
 |----|------|----------------|
-| **MCP01** | การวางยาพิษเครื่องมือ | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | การอนุญาตที่มากเกินไป | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | การบดบังเครื่องมือ | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | การจัดเก็บข้อมูลประจำตัวที่ไม่ปลอดภัย | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | การรั่วไหลของข้อมูล | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | การฉีดโค้ด | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | ความเสี่ยงจากบุคคลที่สาม / ห่วงโซ่อุปทาน | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | การบันทึกที่ไม่เพียงพอ | `sast_missing_logging` |
-| **MCP09** | Rug Pull / การแก้ไขเครื่องมือ | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | การกำหนดค่าเซิร์ฟเวอร์ที่ผิดพลาด | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | การวางยาพิษเครื่องมือ | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | การอนุญาตที่มากเกินไป | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | การบดบังเครื่องมือ | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | การจัดเก็บข้อมูลประจำตัวที่ไม่ปลอดภัย | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | การรั่วไหลของข้อมูล | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | การฉีดโค้ด | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | ความเสี่ยงจากบุคคลที่สาม / ห่วงโซ่อุปทาน | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | การบันทึกที่ไม่เพียงพอ | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Rug Pull / การแก้ไขเครื่องมือ | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | การกำหนดค่าเซิร์ฟเวอร์ที่ผิดพลาด | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # แสดงความช่วยเหลือ
 mcp-security-scanner --help
 
-# แสดงรายการเครื่องมือทั้ง 43 ชิ้น
+# แสดงรายการเครื่องมือทั้ง 55 ชิ้น
 mcp-security-scanner --list
 
 # รันเครื่องมือเดียวโดยตรง
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # คำสั่งสะดวก
-mcp-security-scanner --full-audit .           # การตรวจสอบความปลอดภัยแบบเต็มรูปแบบ (การตรวจสอบทั้ง 43 รายการ)
+mcp-security-scanner --full-audit .           # การตรวจสอบความปลอดภัยแบบเต็มรูปแบบ (การตรวจสอบทั้ง 55 รายการ)
 mcp-security-scanner --scan-source src        # การวิเคราะห์แบบสแตติกเท่านั้น
 mcp-security-scanner --scan-deps .            # การตรวจสอบ dependency เท่านั้น
 mcp-security-scanner --scan-config config.json  # การตรวจสอบคอนฟิกเท่านั้น
@@ -484,7 +496,7 @@ src/
   index.ts                    # จุดเริ่มต้น CLI (--help, --list, --tool, --full-audit, stdio server)
   protocol/
     mcp-server.ts             # การตั้งค่าเซิร์ฟเวอร์ MCP (stdio transport)
-    tools.ts                  # รีจิสทรีเครื่องมือ — เครื่องมือทั้ง 43 ชิ้นประกอบที่นี่
+    tools.ts                  # รีจิสทรีเครื่องมือ — เครื่องมือทั้ง 55 ชิ้นประกอบที่นี่
   types/
     index.ts                  # ประเภทที่ใช้ร่วมกัน (ToolDef, ToolContext, ToolResult)
     findings.ts               # ความรุนแรงของการค้นพบ, หมวดหมู่, ประเภทการแมป OWASP
@@ -498,12 +510,24 @@ src/
     crypto.ts                 # การแฮช SHA-256 สำหรับการ pin เครื่องมือ
     fs-helpers.ts             # ตัวช่วยระบบไฟล์ (glob, read, permissions)
     levenshtein.ts            # ระยะห่าง Levenshtein สำหรับการตรวจจับ typosquatting
-  runtime/                    # เครื่องมือ Runtime Inspection (11)
+  runtime/                    # เครื่องมือ Runtime Inspection (23)
     index.ts                  # คำจำกัดความและตัวจัดการเครื่องมือ
     client.ts                 # ไคลเอนต์ MCP สำหรับการเชื่อมต่อกับเซิร์ฟเวอร์เป้าหมาย
     pinning.ts                # การ pin และการตรวจสอบคำจำกัดความเครื่องมือด้วย SHA-256
     schema-analyzer.ts        # การวิเคราะห์ tool schema (scope creep, permissions)
     tool-analyzer.ts          # การวิเคราะห์คำอธิบายเครื่องมือ (poisoning, ANSI, Unicode)
+    oauth-checker.ts          # การตรวจสอบโทเค็น OAuth (ไม่มีโทเค็น, ไม่ถูกต้อง, JWT ปลอม)
+    tls-checker.ts            # การตรวจสอบใบรับรอง TLS (หมดอายุ, self-signed, อ่อนแอ)
+    capabilities-checker.ts   # การตรวจสอบความสามารถเซิร์ฟเวอร์และฟีเจอร์ทดลอง
+    resource-content-checker.ts # การอ่านและสแกนเนื้อหาทรัพยากรจริง
+    fuzzer.ts                 # Fuzz-test เครื่องมือด้วย edge-case inputs
+    http-security-checker.ts  # การตรวจสอบเฮดเดอร์ความปลอดภัย HTTP
+    callback-checker.ts       # การตรวจจับพารามิเตอร์ URL ของ callback/webhook
+    prompt-injection-checker.ts # การสแกนเนื้อหา prompt สำหรับรูปแบบการฉีด
+    instructions-checker.ts   # การวิเคราะห์คำสั่งเซิร์ฟเวอร์
+    mutation-checker.ts       # การเปรียบเทียบ snapshot คู่เพื่อตรวจจับการเปลี่ยนแปลงเครื่องมือ
+    rate-limit-checker.ts     # การทดสอบ rate limiting ด้วย ping bursts
+    protocol-version-checker.ts # การตรวจสอบชื่อ/เวอร์ชันเซิร์ฟเวอร์
   static/                     # เครื่องมือ Static Analysis (12)
     index.ts                  # คำจำกัดความและตัวจัดการเครื่องมือ
     ast-engine.ts             # เอนจิน AST ของ ts-morph สำหรับการแยกวิเคราะห์ TypeScript/JavaScript
@@ -631,7 +655,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>43 เครื่องมือใน 6 หมวดหมู่</b></td>
+<td><b>55 เครื่องมือใน 6 หมวดหมู่</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +672,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | ข่าวกรองช่องโหว่ | 23 เครื่องมือ, 5 แหล่ง |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT & การสอดแนม | 37 เครื่องมือ, 12 แหล่ง |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | ข่าวกรอง dark web & ภัยคุกคาม | 66 เครื่องมือ, 16 แหล่ง |
-| **mcp-security-scanner** | **การสแกนความปลอดภัยเซิร์ฟเวอร์ MCP** | **43 เครื่องมือ, 6 หมวดหมู่** |
+| **mcp-security-scanner** | **การสแกนความปลอดภัยเซิร์ฟเวอร์ MCP** | **55 เครื่องมือ, 6 หมวดหมู่** |
 
 ---
 

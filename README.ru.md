@@ -47,7 +47,7 @@
   <a href="#чем-это-отличается">Чем это отличается</a> &bull;
   <a href="#быстрый-старт">Быстрый старт</a> &bull;
   <a href="#что-может-делать-ai">Что может делать AI</a> &bull;
-  <a href="#инструменты-43-инструмента">Инструменты (43)</a> &bull;
+  <a href="#инструменты-55-инструментов">Инструменты (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#архитектура">Архитектура</a> &bull;
   <a href="CHANGELOG.md">Changelog</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Tools">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Tools">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@
   Итого: часы на сервер, в основном пропуская тонкие проблемы
 ```
 
-**mcp-security-scanner** дает вашему AI-агенту 43 инструмента в 6 категориях. Агент подключается к любому серверу MCP, проверяет инструменты в реальном времени, сканирует исходный код с помощью статического анализа на основе AST, проверяет конфигурации, проверяет зависимости и генерирует отчеты с оценками соответствия OWASP MCP Top 10 &mdash; все в одном разговоре.
+**mcp-security-scanner** дает вашему AI-агенту 55 инструментов в 6 категориях. Агент подключается к любому серверу MCP, проверяет инструменты в реальном времени, сканирует исходный код с помощью статического анализа на основе AST, проверяет конфигурации, проверяет зависимости и генерирует отчеты с оценками соответствия OWASP MCP Top 10 &mdash; все в одном разговоре.
 
 ```
 С mcp-security-scanner:
@@ -160,7 +160,7 @@
 <tr>
 <td><b>Соответствие</b></td>
 <td>Нет стандартных инструментов</td>
-<td>Сопоставление OWASP MCP Top 10 &mdash; 43 проверки в 10 категориях рисков</td>
+<td>Сопоставление OWASP MCP Top 10 &mdash; 55 проверок в 10 категориях рисков</td>
 </tr>
 <tr>
 <td><b>Отчеты</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### Переменные окружения не нужны
 
-mcp-security-scanner требует **нулевой конфигурации**. Без API-ключей, без токенов, без внешних сервисов. Все 43 инструмента работают полностью на вашей локальной машине.
+mcp-security-scanner требует **нулевой конфигурации**. Без API-ключей, без токенов, без внешних сервисов. Все 55 инструментов работают полностью на вашей локальной машине.
 
 ### Подключите к вашему AI-агенту
 
@@ -336,10 +336,10 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 ---
 
-## Инструменты (43 инструмента)
+## Инструменты (55 инструментов)
 
 <details open>
-<summary><b>Инспекция среды выполнения (11) &mdash; Без API-ключа</b></summary>
+<summary><b>Инспекция среды выполнения (23) &mdash; Без API-ключа</b></summary>
 
 | Инструмент | Описание |
 |------|-------------|
@@ -354,6 +354,18 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 | `rt_verify_pins` | Проверять текущие определения инструментов относительно ранее сохраненных закреплений для обнаружения модификаций rug pull |
 | `rt_check_auth` | Анализировать механизмы аутентификации и авторизации сервера |
 | `rt_check_resource_exposure` | Проверить раскрытие чувствительных ресурсов через конечные точки ресурсов MCP |
+| `rt_check_oauth` | Проверить, валидирует ли HTTP/SSE-сервер токены OAuth &mdash; отправляет отсутствующий токен, невалидный токен и поддельный JWT (alg:none) |
+| `rt_check_tls` | Инспектировать TLS-сертификат &mdash; просроченный, самоподписанный, слабая подпись (SHA-1), короткий ключ (<2048 бит), чистый HTTP |
+| `rt_check_capabilities` | Инспектировать возможности сервера &mdash; экспериментальные функции, динамические изменения инструментов (listChanged), логирование, семплирование |
+| `rt_check_resource_content` | Прочитать фактическое содержимое ресурса через readResource() и просканировать на отравление, ANSI, Unicode-стего, слишком большое содержимое |
+| `rt_fuzz_tools` | Фаззинг-тестирование инструментов с граничными входными данными &mdash; path traversal, command injection, SQL injection, путаница типов (пробный запуск по умолчанию) |
+| `rt_check_http_security` | Проверить заголовки HTTP-ответов &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, флаги cookie |
+| `rt_check_callbacks` | Обнаружить параметры URL callback/webhook, которые могут обеспечить SSRF &mdash; проверяет отсутствие ограничений URL |
+| `rt_check_prompt_injection` | Получить содержимое промпта через getPrompt() и просканировать на паттерны инъекции, синтаксис шаблонов, опасные аргументы |
+| `rt_check_instructions` | Анализировать инструкции сервера из инициализации на отравление, социальную инженерию, чрезмерную длину |
+| `rt_check_tool_mutation` | Сравнение двойных снапшотов с настраиваемой задержкой &mdash; обнаружение добавления, удаления инструментов, изменения описаний (rug pull) |
+| `rt_check_rate_limiting` | Отправить быстрые серии ping() для тестирования ограничения скорости &mdash; помечает серверы, принимающие неограниченные запросы |
+| `rt_check_protocol_version` | Проверить имя/версию сервера из инициализации &mdash; помечает отсутствующую информацию, устаревшие версии SDK |
 
 </details>
 
@@ -415,7 +427,7 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 | `report_generate` | Сгенерировать отчет безопасности в формате JSON, Markdown или SARIF 2.1.0 из результатов сканирования |
 | `report_owasp_compliance` | Сгенерировать отчет о соответствии OWASP MCP Top 10 &mdash; сопоставить все находки с категориями MCP01-MCP10 |
 | `report_compare` | Сравнить два отчета безопасности, чтобы показать новые, исправленные и неизмененные находки во времени |
-| `report_full_audit` | Запустить все 43 проверки и сгенерировать комплексный отчет аудита безопасности с оценкой OWASP |
+| `report_full_audit` | Запустить все 55 проверок и сгенерировать комплексный отчет аудита безопасности с оценкой OWASP |
 
 </details>
 
@@ -424,7 +436,7 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 | Инструмент | Описание |
 |------|-------------|
-| `scanner_list_checks` | Перечислить все 43 проверки безопасности с категориями, уровнями серьезности и сопоставлением OWASP MCP Top 10 |
+| `scanner_list_checks` | Перечислить все 55 проверок безопасности с категориями, уровнями серьезности и сопоставлением OWASP MCP Top 10 |
 | `scanner_owasp_mapping` | Показать полное сопоставление OWASP MCP Top 10 &mdash; какие проверки сканера покрывают каждую категорию риска |
 
 </details>
@@ -433,20 +445,20 @@ claude mcp add mcp-security-scanner -- bun run /path/to/mcp-security-scanner/src
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner сопоставляет все 43 проверки с системой рисков [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
+mcp-security-scanner сопоставляет все 55 проверок с системой рисков [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/).
 
 | ID | Риск | Проверки сканера |
 |----|------|----------------|
-| **MCP01** | Отравление инструментов | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | Избыточные разрешения | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | Затенение инструментов | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | Небезопасное хранение учетных данных | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | Утечка данных | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | Инъекция кода | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | Риск третьих сторон / цепочки поставок | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | Недостаточное логирование | `sast_missing_logging` |
-| **MCP09** | Rug Pull / модификация инструментов | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | Неправильная конфигурация сервера | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | Отравление инструментов | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | Избыточные разрешения | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | Затенение инструментов | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | Небезопасное хранение учетных данных | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | Утечка данных | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | Инъекция кода | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | Риск третьих сторон / цепочки поставок | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | Недостаточное логирование | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Rug Pull / модификация инструментов | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | Неправильная конфигурация сервера | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # Показать справку
 mcp-security-scanner --help
 
-# Перечислить все 43 инструмента
+# Перечислить все 55 инструментов
 mcp-security-scanner --list
 
 # Запустить один инструмент напрямую
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # Удобные команды
-mcp-security-scanner --full-audit .           # Полный аудит безопасности (все 43 проверки)
+mcp-security-scanner --full-audit .           # Полный аудит безопасности (все 55 проверок)
 mcp-security-scanner --scan-source src        # Только статический анализ
 mcp-security-scanner --scan-deps .            # Только аудит зависимостей
 mcp-security-scanner --scan-config config.json  # Только аудит конфигурации
@@ -484,7 +496,7 @@ src/
   index.ts                    # Точка входа CLI (--help, --list, --tool, --full-audit, stdio сервер)
   protocol/
     mcp-server.ts             # Настройка MCP-сервера (транспорт stdio)
-    tools.ts                  # Реестр инструментов — все 43 инструмента собраны здесь
+    tools.ts                  # Реестр инструментов — все 55 инструментов собраны здесь
   types/
     index.ts                  # Общие типы (ToolDef, ToolContext, ToolResult)
     findings.ts               # Типы серьезности находок, категорий, сопоставления OWASP
@@ -498,12 +510,24 @@ src/
     crypto.ts                 # SHA-256 хэширование для закрепления инструментов
     fs-helpers.ts             # Помощники файловой системы (glob, read, permissions)
     levenshtein.ts            # Расстояние Левенштейна для обнаружения тайпсквоттинга
-  runtime/                    # Инструменты инспекции среды выполнения (11)
+  runtime/                    # Инструменты инспекции среды выполнения (23)
     index.ts                  # Определения и обработчики инструментов
     client.ts                 # MCP-клиент для подключения к целевым серверам
     pinning.ts                # Закрепление и проверка определений инструментов SHA-256
     schema-analyzer.ts        # Анализ схем инструментов (scope creep, разрешения)
     tool-analyzer.ts          # Анализ описаний инструментов (отравление, ANSI, Unicode)
+    oauth-checker.ts          # Тестирование валидации OAuth-токенов
+    tls-checker.ts            # Инспекция TLS-сертификата
+    capabilities-checker.ts   # Анализ возможностей сервера
+    resource-content-checker.ts # Сканирование отравления содержимого ресурсов
+    fuzzer.ts                 # Фаззинг-тестирование инструментов с граничными данными
+    http-security-checker.ts  # Проверка заголовков безопасности HTTP
+    callback-checker.ts       # Обнаружение SSRF через callback/webhook
+    prompt-injection-checker.ts # Сканирование инъекции содержимого промпта
+    instructions-checker.ts   # Анализ отравления инструкций сервера
+    tool-mutation-checker.ts  # Обнаружение rug pull двойным снапшотом
+    rate-limit-checker.ts     # Тестирование ограничения скорости
+    protocol-version-checker.ts # Проверка версии протокола
   static/                     # Инструменты статического анализа (12)
     index.ts                  # Определения и обработчики инструментов
     ast-engine.ts             # Движок AST ts-morph для парсинга TypeScript/JavaScript
@@ -631,7 +655,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>43 инструмента в 6 категориях</b></td>
+<td><b>55 инструментов в 6 категориях</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +672,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | Разведка уязвимостей | 23 инструмента, 5 источников |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT и разведка | 37 инструментов, 12 источников |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | Dark web и разведка угроз | 66 инструментов, 16 источников |
-| **mcp-security-scanner** | **Сканирование безопасности MCP-сервера** | **43 инструмента, 6 категорий** |
+| **mcp-security-scanner** | **Сканирование безопасности MCP-сервера** | **55 инструментов, 6 категорий** |
 
 ---
 
