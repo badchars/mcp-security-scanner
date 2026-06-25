@@ -47,7 +47,7 @@
   <a href="#how-its-different">How It's Different</a> &bull;
   <a href="#quick-start">Quick Start</a> &bull;
   <a href="#what-the-ai-can-do">What The AI Can Do</a> &bull;
-  <a href="#tools-reference-43-tools">Tools (43)</a> &bull;
+  <a href="#tools-reference-55-tools">Tools (55)</a> &bull;
   <a href="#owasp-mcp-top-10">OWASP MCP Top 10</a> &bull;
   <a href="#architecture">Architecture</a> &bull;
   <a href="CHANGELOG.md">Changelog</a> &bull;
@@ -59,7 +59,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <img src="https://img.shields.io/badge/runtime-Bun-f472b6" alt="Bun">
   <img src="https://img.shields.io/badge/protocol-MCP-8b5cf6" alt="MCP">
-  <img src="https://img.shields.io/badge/tools-43-ef4444" alt="43 Tools">
+  <img src="https://img.shields.io/badge/tools-55-ef4444" alt="55 Tools">
   <img src="https://img.shields.io/badge/OWASP_MCP_Top_10-covered-f97316" alt="OWASP MCP Top 10">
 </p>
 
@@ -93,7 +93,7 @@ Traditional MCP security workflow:
   Total: hours per server, mostly missing subtle issues
 ```
 
-**mcp-security-scanner** gives your AI agent 43 tools across 6 categories. The agent connects to any MCP server, inspects tools live, scans source code with AST-based static analysis, audits configs, checks dependencies, and generates reports with OWASP MCP Top 10 compliance scores &mdash; all in a single conversation.
+**mcp-security-scanner** gives your AI agent 55 tools across 6 categories. The agent connects to any MCP server (stdio, HTTP, or SSE), inspects tools live, fuzz-tests inputs, scans source code with AST-based static analysis, audits configs, checks dependencies, and generates reports with OWASP MCP Top 10 compliance scores &mdash; all in a single conversation.
 
 ```
 With mcp-security-scanner:
@@ -115,7 +115,7 @@ With mcp-security-scanner:
             OWASP MCP compliance: 4.2/10. Immediate remediation needed."
 ```
 
-No API keys. No external calls. Everything runs locally. **100% privacy.**
+No API keys. No external calls. Everything runs locally. **100% privacy.** Supports stdio, HTTP, and SSE transports.
 
 ---
 
@@ -160,7 +160,7 @@ Existing tools check one narrow thing. mcp-security-scanner gives your AI agent 
 <tr>
 <td><b>Compliance</b></td>
 <td>No standard tooling</td>
-<td>OWASP MCP Top 10 mapping &mdash; 43 checks across 10 risk categories</td>
+<td>OWASP MCP Top 10 mapping &mdash; 55 checks across 10 risk categories</td>
 </tr>
 <tr>
 <td><b>Reports</b></td>
@@ -192,7 +192,7 @@ bun install
 
 ### No environment variables needed
 
-mcp-security-scanner requires **zero configuration**. No API keys, no tokens, no external services. All 43 tools run entirely on your local machine.
+mcp-security-scanner requires **zero configuration**. No API keys, no tokens, no external services. All 55 tools run entirely on your local machine.
 
 ### Connect to your AI agent
 
@@ -336,14 +336,14 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ---
 
-## Tools Reference (43 tools)
+## Tools Reference (55 tools)
 
 <details open>
-<summary><b>Runtime Inspection (11) &mdash; No API key</b></summary>
+<summary><b>Runtime Inspection (23) &mdash; No API key</b></summary>
 
 | Tool | Description |
 |------|-------------|
-| `rt_inspect_server` | Connect to a running MCP server and enumerate all tools, their schemas, and descriptions |
+| `rt_inspect_server` | Connect to a running MCP server (stdio/HTTP/SSE) and enumerate all tools, schemas, resources, and prompts |
 | `rt_check_tool_poisoning` | Scan tool descriptions for 15+ poisoning patterns &mdash; hidden instructions, prompt injection, data exfiltration triggers |
 | `rt_check_ansi_injection` | Detect ANSI escape sequences in tool descriptions that can manipulate terminal output or hide content |
 | `rt_check_unicode_steganography` | Detect zero-width Unicode characters used to hide instructions in tool descriptions (steganography) |
@@ -354,6 +354,18 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `rt_verify_pins` | Verify current tool definitions against previously saved pins to detect rug pull modifications |
 | `rt_check_auth` | Analyze server authentication and authorization mechanisms |
 | `rt_check_resource_exposure` | Check for sensitive resource exposure through MCP resource endpoints |
+| `rt_check_oauth` | Test if HTTP/SSE server validates OAuth tokens &mdash; sends no token, invalid token, and forged JWT (alg:none) |
+| `rt_check_tls` | Inspect TLS certificate &mdash; expired, self-signed, weak signature (SHA-1), short key (<2048 bits), plain HTTP |
+| `rt_check_capabilities` | Inspect server capabilities &mdash; experimental features, dynamic tool changes (listChanged), logging, sampling |
+| `rt_check_resource_content` | Read actual resource content via readResource() and scan for poisoning, ANSI, Unicode stego, oversized content |
+| `rt_fuzz_tools` | Fuzz-test tools with edge-case inputs &mdash; path traversal, command injection, SQL injection, type confusion (dry-run by default) |
+| `rt_check_http_security` | Check HTTP response headers &mdash; HSTS, CORS, X-Content-Type-Options, Cache-Control, cookie flags |
+| `rt_check_callbacks` | Detect callback/webhook URL parameters that could enable SSRF &mdash; checks for missing URL constraints |
+| `rt_check_prompt_injection` | Fetch prompt content via getPrompt() and scan for injection patterns, template syntax, dangerous arguments |
+| `rt_check_instructions` | Analyze server instructions from initialization for poisoning, social engineering, excessive length |
+| `rt_check_tool_mutation` | Dual-snapshot comparison with configurable delay &mdash; detect tool additions, removals, description changes (rug pull) |
+| `rt_check_rate_limiting` | Send rapid ping() bursts to test rate limiting &mdash; flags servers accepting unlimited requests |
+| `rt_check_protocol_version` | Check server name/version from initialization &mdash; flags missing info, outdated SDK versions |
 
 </details>
 
@@ -415,7 +427,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 | `report_generate` | Generate a security report in JSON, Markdown, or SARIF 2.1.0 format from scan findings |
 | `report_owasp_compliance` | Generate an OWASP MCP Top 10 compliance report &mdash; map all findings to MCP01-MCP10 categories |
 | `report_compare` | Compare two security reports to show new, fixed, and unchanged findings over time |
-| `report_full_audit` | Run all 43 checks and generate a comprehensive security audit report with OWASP scoring |
+| `report_full_audit` | Run all 55 checks and generate a comprehensive security audit report with OWASP scoring |
 
 </details>
 
@@ -424,7 +436,7 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 | Tool | Description |
 |------|-------------|
-| `scanner_list_checks` | List all 43 security checks with categories, severity levels, and OWASP MCP Top 10 mapping |
+| `scanner_list_checks` | List all 55 security checks with categories, severity levels, and OWASP MCP Top 10 mapping |
 | `scanner_owasp_mapping` | Show the complete OWASP MCP Top 10 mapping &mdash; which scanner checks cover each risk category |
 
 </details>
@@ -433,20 +445,20 @@ Agent: -> report_owasp_compliance {projectPath: "/path/to/project"}
 
 ## OWASP MCP Top 10
 
-mcp-security-scanner maps all 43 checks to the [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) risk framework.
+mcp-security-scanner maps all 55 checks to the [OWASP MCP Top 10](https://owasp.org/www-project-model-context-protocol-top-10/) risk framework.
 
 | ID | Risk | Scanner Checks |
 |----|------|----------------|
-| **MCP01** | Tool Poisoning | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography` |
-| **MCP02** | Excessive Permissions | `rt_check_scope_creep`, `rt_check_resource_exposure`, `cfg_check_context_oversharing` |
-| **MCP03** | Tool Shadowing | `rt_check_tool_shadowing`, `rt_check_cross_origin` |
-| **MCP04** | Insecure Credential Storage | `sast_hardcoded_secrets`, `cfg_scan_env_files`, `cfg_check_file_permissions` |
-| **MCP05** | Data Leakage | `sast_info_disclosure`, `cfg_check_context_oversharing`, `rt_check_resource_exposure` |
-| **MCP06** | Code Injection | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution` |
-| **MCP07** | Third-Party / Supply Chain Risk | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license` |
-| **MCP08** | Insufficient Logging | `sast_missing_logging` |
-| **MCP09** | Rug Pull / Tool Modification | `rt_pin_tools`, `rt_verify_pins`, `report_compare` |
-| **MCP10** | Server Misconfiguration | `cfg_auto_discover`, `cfg_audit_mcp_config`, `cfg_check_shadow_servers`, `cfg_check_transport_security`, `rt_check_auth` |
+| **MCP01** | Excessive Privilege & Token Mismanagement | `rt_check_scope_creep`, `rt_check_capabilities`, `cfg_check_context_oversharing` |
+| **MCP02** | Tool & Scope Mismanagement | `rt_check_scope_creep`, `rt_check_resource_exposure`, `rt_check_callbacks`, `cfg_check_context_oversharing` |
+| **MCP03** | Tool Poisoning via Description Injection | `rt_check_tool_poisoning`, `rt_check_ansi_injection`, `rt_check_unicode_steganography`, `rt_check_resource_content`, `rt_check_prompt_injection`, `rt_check_instructions` |
+| **MCP04** | Supply Chain & Dependency Vulnerabilities | `dep_audit_lockfile`, `dep_check_typosquatting`, `dep_check_install_scripts`, `dep_check_unpinned`, `dep_check_license`, `dep_check_mcp_sdk_version` |
+| **MCP05** | Command Injection & Code Execution | `sast_command_injection`, `sast_ssrf`, `sast_path_traversal`, `sast_code_execution`, `sast_prototype_pollution`, `rt_fuzz_tools` |
+| **MCP06** | Context & Tool Shadowing | `rt_check_tool_shadowing`, `rt_check_cross_origin`, `rt_check_tool_mutation`, `rt_check_capabilities` |
+| **MCP07** | Insufficient Authentication & Transport Security | `rt_check_auth`, `rt_check_oauth`, `rt_check_tls`, `rt_check_http_security`, `rt_check_protocol_version`, `cfg_check_transport_security` |
+| **MCP08** | Insufficient Logging & Error Handling | `sast_missing_logging`, `rt_check_rate_limiting`, `rt_fuzz_tools` |
+| **MCP09** | Shadow Servers & Unauthorized MCP Endpoints | `rt_pin_tools`, `rt_verify_pins`, `rt_check_tool_mutation`, `cfg_check_shadow_servers`, `report_compare` |
+| **MCP10** | Context Over-sharing & Data Exposure | `rt_check_resource_exposure`, `rt_check_resource_content`, `sast_info_disclosure`, `cfg_check_context_oversharing`, `sast_hardcoded_secrets`, `cfg_scan_env_files` |
 
 ---
 
@@ -459,7 +471,7 @@ mcp-security-scanner
 # Show help
 mcp-security-scanner --help
 
-# List all 43 tools
+# List all 55 tools
 mcp-security-scanner --list
 
 # Run a single tool directly
@@ -468,7 +480,7 @@ mcp-security-scanner --tool sast_scan_directory '{"directory": "./src"}'
 mcp-security-scanner --tool dep_check_typosquatting '{"projectPath": "."}'
 
 # Convenience commands
-mcp-security-scanner --full-audit .           # Full security audit (all 43 checks)
+mcp-security-scanner --full-audit .           # Full security audit (all 55 checks)
 mcp-security-scanner --scan-source src        # Static analysis only
 mcp-security-scanner --scan-deps .            # Dependency audit only
 mcp-security-scanner --scan-config config.json  # Config audit only
@@ -484,13 +496,14 @@ src/
   index.ts                    # CLI entrypoint (--help, --list, --tool, --full-audit, stdio server)
   protocol/
     mcp-server.ts             # MCP server setup (stdio transport)
-    tools.ts                  # Tool registry — all 43 tools assembled here
+    tools.ts                  # Tool registry — all 55 tools assembled here
   types/
     index.ts                  # Shared types (ToolDef, ToolContext, ToolResult)
     findings.ts               # Finding severity, category, OWASP mapping types
   data/
     dangerous-sinks.ts        # Dangerous function sinks for taint tracking
     owasp-mcp-top10.ts        # OWASP MCP Top 10 definitions and mappings
+    callback-patterns.ts      # Callback/webhook URL patterns, template injection, fuzz payloads
     poisoning-patterns.ts     # 15+ tool poisoning detection patterns
     popular-packages.ts       # 500+ popular npm packages for typosquatting check
     secret-patterns.ts        # Regex patterns for hardcoded secret detection
@@ -498,12 +511,18 @@ src/
     crypto.ts                 # SHA-256 hashing for tool pinning
     fs-helpers.ts             # File system helpers (glob, read, permissions)
     levenshtein.ts            # Levenshtein distance for typosquatting detection
-  runtime/                    # Runtime Inspection tools (11)
-    index.ts                  # Tool definitions and handlers
-    client.ts                 # MCP client for connecting to target servers
+  runtime/                    # Runtime Inspection tools (23)
+    index.ts                  # Base tool definitions and handlers (11 tools)
+    advanced-tools.ts         # Advanced tool definitions (12 tools: OAuth, TLS, fuzz, etc.)
+    shared.ts                 # Shared helpers (serverSchema, getConnectOpts, formatFindings)
+    client.ts                 # MCP client for connecting to target servers (stdio/HTTP/SSE)
     pinning.ts                # SHA-256 tool definition pinning and verification
     schema-analyzer.ts        # Tool schema analysis (scope creep, permissions)
     tool-analyzer.ts          # Tool description analysis (poisoning, ANSI, Unicode)
+    tls-analyzer.ts           # TLS certificate inspection (expiry, trust, key strength)
+    auth-analyzer.ts          # HTTP security header analysis (HSTS, CORS, cookies)
+    capabilities-analyzer.ts  # Server capabilities, instructions, and protocol version
+    content-analyzer.ts       # Resource content, prompt content, and callback analysis
   static/                     # Static Analysis tools (12)
     index.ts                  # Tool definitions and handlers
     ast-engine.ts             # ts-morph AST engine for TypeScript/JavaScript parsing
@@ -631,7 +650,7 @@ src/
 <td>~5</td>
 <td>~10</td>
 <td>~5</td>
-<td><b>43 tools across 6 categories</b></td>
+<td><b>55 tools across 6 categories</b></td>
 </tr>
 </tbody>
 </table>
@@ -648,7 +667,7 @@ src/
 | [cve-mcp](https://github.com/badchars/cve-mcp) | Vulnerability intelligence | 23 tools, 5 sources |
 | [osint-mcp-server](https://github.com/badchars/osint-mcp-server) | OSINT & reconnaissance | 37 tools, 12 sources |
 | [darknet-mcp-server](https://github.com/badchars/darknet-mcp-server) | Dark web & threat intelligence | 66 tools, 16 sources |
-| **mcp-security-scanner** | **MCP server security scanning** | **43 tools, 6 categories** |
+| **mcp-security-scanner** | **MCP server security scanning** | **55 tools, 6 categories** |
 
 ---
 
