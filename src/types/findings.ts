@@ -44,8 +44,9 @@ export interface ToolPin {
 
 export interface PinFile {
   pin_name: string;
-  server_command: string;
+  server_command?: string;
   server_args?: string[];
+  server_url?: string;
   timestamp: string;
   tool_count: number;
   manifest_hash: string;

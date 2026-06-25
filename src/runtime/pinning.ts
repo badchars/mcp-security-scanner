@@ -18,16 +18,16 @@ export function hashTools(tools: ServerTool[]): { tools: ToolPin[]; manifestHash
 export async function savePin(
   pinDir: string,
   pinName: string,
-  command: string,
-  args: string[] | undefined,
+  server: { command?: string; args?: string[]; url?: string },
   tools: ServerTool[],
 ): Promise<PinFile> {
   const { tools: toolPins, manifestHash } = hashTools(tools);
 
   const pinFile: PinFile = {
     pin_name: pinName,
-    server_command: command,
-    server_args: args,
+    server_command: server.command,
+    server_args: server.args,
+    server_url: server.url,
     timestamp: new Date().toISOString(),
     tool_count: tools.length,
     manifest_hash: manifestHash,

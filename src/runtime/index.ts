@@ -2,18 +2,38 @@ import { z } from "zod";
 import type { ToolDef } from "../types/index.js";
 import { text, json } from "../types/index.js";
 import type { Finding } from "../types/findings.js";
-import { connectAndInspect } from "./client.js";
+import { connectToServer, type ConnectOptions } from "./client.js";
 import { analyzePoisoning, analyzeAnsiInjection, analyzeUnicodeSteganography } from "./tool-analyzer.js";
 import { analyzeScope, analyzeToolShadowing, analyzeCrossOrigin, analyzeResourceExposure } from "./schema-analyzer.js";
 import { savePin, loadPin, verifyAgainstPin } from "./pinning.js";
 
-// Common schema for server connection
+// Common schema for server connection — supports both stdio and HTTP/SSE
 const serverSchema = {
-  command: z.string().describe("Server command to execute (e.g. 'node', 'bun', 'npx')"),
-  args: z.array(z.string()).optional().describe("Command arguments (e.g. ['run', 'server.js'])"),
-  env: z.record(z.string()).optional().describe("Additional environment variables"),
+  command: z.string().optional().describe("Server command for stdio transport (e.g. 'node', 'bun', 'npx')"),
+  args: z.array(z.string()).optional().describe("Command arguments for stdio (e.g. ['run', 'server.js'])"),
+  env: z.record(z.string()).optional().describe("Additional environment variables for stdio"),
+  url: z.string().optional().describe("MCP server URL for HTTP/SSE transport (e.g. 'http://localhost:3000/mcp')"),
+  headers: z.record(z.string()).optional().describe("Custom HTTP headers (e.g. { 'Authorization': 'Bearer token' })"),
   timeout_ms: z.number().optional().describe("Connection timeout in milliseconds (default: 30000)"),
 };
+
+function getConnectOpts(args: Record<string, unknown>): ConnectOptions {
+  const command = args.command as string | undefined;
+  const url = args.url as string | undefined;
+
+  if (!command && !url) {
+    throw new Error("Either 'command' (stdio) or 'url' (HTTP/SSE) must be provided.");
+  }
+
+  return {
+    command,
+    args: args.args as string[] | undefined,
+    env: args.env as Record<string, string> | undefined,
+    url,
+    headers: args.headers as Record<string, string> | undefined,
+    timeout_ms: args.timeout_ms as number | undefined,
+  };
+}
 
 function formatFindings(findings: Finding[]): string {
   if (findings.length === 0) return "No findings.";
@@ -36,17 +56,13 @@ function formatFindings(findings: Finding[]): string {
 const rtInspectServer: ToolDef = {
   name: "rt_inspect_server",
   description:
-    "Connect to an MCP server via stdio, enumerate all tools with descriptions and schemas, list resources and prompts. Returns full server capability manifest.",
+    "Connect to an MCP server via stdio or HTTP/SSE, enumerate all tools with descriptions and schemas, list resources and prompts. Returns full server capability manifest.",
   schema: serverSchema,
   async execute(args) {
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
     return json({
+      transport: manifest.transport,
       tool_count: manifest.tools.length,
       resource_count: manifest.resources.length,
       prompt_count: manifest.prompts.length,
@@ -66,12 +82,7 @@ const rtCheckToolPoisoning: ToolDef = {
     tool_name: z.string().optional().describe("Check only this tool (default: all tools)"),
   },
   async execute(args) {
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
     let tools = manifest.tools;
     if (args.tool_name) {
@@ -90,12 +101,7 @@ const rtCheckAnsiInjection: ToolDef = {
     "Scan all tool descriptions and schema field descriptions for ANSI escape sequences (CSI codes, cursor movement, color codes) used to hide malicious text in terminal display while LLM still reads it.",
   schema: serverSchema,
   async execute(args) {
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
     const findings = analyzeAnsiInjection(manifest.tools);
     return text(formatFindings(findings));
@@ -108,12 +114,7 @@ const rtCheckUnicodeSteganography: ToolDef = {
     "Detect hidden Unicode characters in tool descriptions: zero-width spaces, zero-width joiners, word joiners, RTL/LTR override, BOM, invisible separators, homoglyph characters. These can hide instructions visible to LLM but invisible to humans.",
   schema: serverSchema,
   async execute(args) {
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
     const findings = analyzeUnicodeSteganography(manifest.tools);
     return text(formatFindings(findings));
@@ -126,12 +127,7 @@ const rtCheckScopeCreep: ToolDef = {
     "Analyze tool schemas for over-permissive parameter types: arbitrary file paths, unrestricted URLs, shell commands, wildcard globs, any-type schemas. Also flags excessive tool count (>50).",
   schema: serverSchema,
   async execute(args) {
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
     const findings = analyzeScope(manifest.tools);
     return text(formatFindings(findings));
@@ -147,12 +143,7 @@ const rtCheckToolShadowing: ToolDef = {
     known_tools: z.array(z.string()).optional().describe("Custom list of known tool names to check against"),
   },
   async execute(args) {
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
     const findings = analyzeToolShadowing(manifest.tools, args.known_tools as string[] | undefined);
     return text(formatFindings(findings));
@@ -165,12 +156,7 @@ const rtCheckCrossOrigin: ToolDef = {
     "Scan tool descriptions for references to tools from OTHER servers — patterns like 'when using the email tool', 'before calling read_file'. These cross-origin instructions enable tool shadowing attacks.",
   schema: serverSchema,
   async execute(args) {
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
     const findings = analyzeCrossOrigin(manifest.tools);
     return text(formatFindings(findings));
@@ -186,18 +172,13 @@ const rtPinTools: ToolDef = {
     pin_name: z.string().describe("Name for this pin (used as filename, e.g. 'my-mcp-server')"),
   },
   async execute(args, ctx) {
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
+    const opts = getConnectOpts(args);
     const pinFile = await savePin(
       ctx.config.pinDir,
       args.pin_name as string,
-      args.command as string,
-      args.args as string[] | undefined,
+      { command: opts.command, args: opts.args, url: opts.url },
       manifest.tools,
     );
 
@@ -223,12 +204,7 @@ const rtVerifyPins: ToolDef = {
     const pin = await loadPin(ctx.config.pinDir, args.pin_name as string);
     if (!pin) return text(`Pin "${args.pin_name}" not found. Run rt_pin_tools first.`);
 
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
     const verification = verifyAgainstPin(pin, manifest.tools);
 
@@ -271,18 +247,19 @@ const rtCheckAuth: ToolDef = {
     "Test if MCP server requires authentication. Connects without credentials and checks if tools are accessible. Flags servers that accept unauthenticated connections.",
   schema: serverSchema,
   async execute(args) {
-    // For stdio servers, there's no auth layer — we check if the server
-    // starts without any auth env vars and still exposes tools
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      {}, // empty env — no API keys
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    // Connect without credentials to test if auth is required
+    // For stdio: empty env (no API keys). For HTTP: no auth headers.
+    const opts = getConnectOpts(args);
+    opts.env = {};
+    opts.headers = {};
+    const manifest = await connectToServer(opts);
 
     const findings: Finding[] = [];
 
     if (manifest.tools.length > 0) {
+      const transportNote = manifest.transport === "stdio"
+        ? "Connected with empty environment (no API keys)."
+        : `Connected via ${manifest.transport} without authentication headers.`;
       findings.push({
         id: "RT-AUTH-001",
         title: "Server Accepts Unauthenticated Connections",
@@ -290,7 +267,7 @@ const rtCheckAuth: ToolDef = {
         owasp_mcp: "MCP07",
         owasp_mcp_title: "Insufficient Authentication & Transport Security",
         category: "runtime",
-        evidence: `Server exposes ${manifest.tools.length} tools without authentication. Connected with empty environment (no API keys).`,
+        evidence: `Server exposes ${manifest.tools.length} tools without authentication. ${transportNote}`,
         remediation: "Implement authentication for the MCP server. For stdio servers, validate caller identity. For remote servers, require OAuth 2.1 tokens.",
         cwe: "CWE-287",
       });
@@ -306,12 +283,7 @@ const rtCheckResourceExposure: ToolDef = {
     "Enumerate all MCP resources and prompts exposed by the server. Flag resources with broad URI patterns (file://*, https://*), resources exposing sensitive paths, and prompts that could be used for social engineering.",
   schema: serverSchema,
   async execute(args) {
-    const manifest = await connectAndInspect(
-      args.command as string,
-      args.args as string[] | undefined,
-      args.env as Record<string, string> | undefined,
-      (args.timeout_ms as number) ?? 30_000,
-    );
+    const manifest = await connectToServer(getConnectOpts(args));
 
     const findings = analyzeResourceExposure(manifest.resources, manifest.prompts);
 

@@ -51,7 +51,8 @@ USAGE:
   mcp-security-scanner --tool NAME '{}'   Run a single tool with JSON args
 
 SCAN SHORTCUTS:
-  mcp-security-scanner --scan-server "node server.js"     Runtime: 11 checks
+  mcp-security-scanner --scan-server "node server.js"     Runtime: 11 checks (stdio)
+  mcp-security-scanner --scan-server "http://host/mcp"    Runtime: 11 checks (HTTP/SSE)
   mcp-security-scanner --scan-source ./src                SAST: 12 checks
   mcp-security-scanner --scan-config ~/config.json        Config: 7 checks
   mcp-security-scanner --scan-deps .                      Deps: 7 checks
@@ -62,6 +63,9 @@ OUTPUT CONTROL:
   --output FILE                           Write to file (default: stdout)
   --severity critical,high                Filter by minimum severity
   --owasp MCP03,MCP05                     Filter by OWASP category
+
+HTTP/SSE OPTIONS:
+  --header "Key: Value"                   Custom HTTP header (repeatable)
 
 TOOL PINNING:
   --pin "node server.js" --pin-name NAME  Pin tool definitions
@@ -292,20 +296,40 @@ async function main(): Promise<void> {
     return;
   }
 
-  // --scan-server "command args..."
+  // --scan-server "command args..." or --scan-server "http://host/mcp"
   const scanServerIdx = args.indexOf("--scan-server");
   if (scanServerIdx !== -1) {
     const cmdStr = args[scanServerIdx + 1];
-    if (!cmdStr) { console.error("--scan-server requires a command string."); process.exit(1); }
-    const parts = cmdStr.split(/\s+/);
-    const command = parts[0];
-    const cmdArgs = parts.slice(1);
+    if (!cmdStr) { console.error("--scan-server requires a command string or URL."); process.exit(1); }
+
+    // Detect HTTP/SSE URL vs stdio command
+    const isUrl = /^https?:\/\//i.test(cmdStr);
+    let toolArgs: Record<string, unknown>;
+
+    if (isUrl) {
+      // Collect --header flags: --header "Authorization: Bearer xxx" --header "X-Custom: val"
+      const headers: Record<string, string> = {};
+      for (let i = 0; i < args.length; i++) {
+        if (args[i] === "--header" && i + 1 < args.length) {
+          const headerStr = args[i + 1];
+          const colonIdx = headerStr.indexOf(":");
+          if (colonIdx > 0) {
+            headers[headerStr.substring(0, colonIdx).trim()] = headerStr.substring(colonIdx + 1).trim();
+          }
+        }
+      }
+      toolArgs = { url: cmdStr, ...(Object.keys(headers).length > 0 ? { headers } : {}) };
+    } else {
+      const parts = cmdStr.split(/\s+/);
+      toolArgs = { command: parts[0], args: parts.slice(1) };
+    }
+
     const ctx = await buildToolContext();
     const results: string[] = [];
     for (const name of ["rt_inspect_server", "rt_check_tool_poisoning", "rt_check_ansi_injection", "rt_check_unicode_steganography", "rt_check_scope_creep", "rt_check_tool_shadowing", "rt_check_cross_origin", "rt_check_resource_exposure"]) {
       const tool = allTools.find((t) => t.name === name)!;
       try {
-        const r = await tool.execute({ command, args: cmdArgs }, ctx);
+        const r = await tool.execute(toolArgs, ctx);
         results.push(`── ${name} ──\n${r.content.map(c => c.text).join("\n")}\n`);
       } catch (err) {
         results.push(`── ${name} ── ERROR: ${(err as Error).message}\n`);
